@@ -1,0 +1,16 @@
+{
+  "name": "iex-haskell-sdk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/JamesCarl/iex-haskell-sdk.git",
+  "author": "James Carl <mail@jamescarl.ai>",
+  "license": "MIT",
+  "devDependencies": {
+    "cz-conventional-changelog": "3.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

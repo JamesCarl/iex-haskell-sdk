@@ -1,0 +1,5716 @@
+openapi: 3.0.0
+info:
+  title: IEX Haskell SDK
+  version: "1.0"
+servers:
+- url: http://api.iextrading.com/1.0
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+paths:
+  /deep/auction:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/auction'
+                type: object
+          description: OK
+    summary: |
+      DEEP broadcasts an Auction Information Message every one second between the Lock-in  Time and the auction match for Opening and Closing Auctions, and during the Display  Only Period for IPO, Halt, and Volatility Auctions. Only IEX listed securities are  deligible for IEX Auctions.
+  /deep/book:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/inline_response_200'
+                type: object
+          description: OK
+    summary: '`book` shows IEX''s bids and asks for given symbols.'
+  /deep:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+          description: OK
+    summary: |
+      DEEP is used to receive real time depth of book quotations direct from IEX.  The depth of book quotations received via DEEP provide an aggregated size of  resting displayed orders at a price and side, and do not indicate the size or number of individual orders at any price level. Non-displayed orders and  non-displayed portions of reserve orders are not represented in DEEP. DEEP also  provides last trade price and size information. Trades resulting from either  displayed or non-displayed orders matching on IEX will be reported.  Routed executions will not be reported.
+  /hist:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: date
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_2'
+                type: array
+          description: OK
+    summary: |
+      Hist will provide the output of IEX data products for download on a T+1 basis.  Data will remain available for the trailing twelve months.
+  /tops/last:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_3'
+                type: array
+          description: OK
+    summary: |
+      Last provides trade data for executions on IEX. It is a near real time,  intraday API that provides IEX last sale price, size and time. Last is  ideal for developers that need a lightweight stock quote.
+  /deep/official-price:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: true
+        schema:
+          items:
+            type: string
+          maxItems: 1
+          minItems: 1
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+          description: OK
+    summary: |
+      The Official Price message is used to disseminate the IEX Official Opening and Closing Prices. These messages will be provided only for IEX Listed Securities.
+  /deep/op-halt-status:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/inline_response_200_5'
+                type: object
+          description: OK
+    summary: |
+      The Exchange may suspend trading of one or more securities on IEX for operational r easons and indicates such operational halt using the Operational halt status message. IEX disseminates a full pre-market spin of Operational halt status messages indicating the  operational halt status of all securities. In the spin, IEX will send out an Operational Halt  Message with “N” (Not operationally halted on IEX) for all securities that are eligible for  trading at the start of the Pre-Market Session. If a security is absent from the dissemination,  firms should assume that the security is being treated as operationally halted in the IEX Trading  System at the start of the Pre-Market Session. After the pre-market spin, IEX will use the Operational halt status message  to relay changes in operational halt status for an individual security.
+  /deep/security-event:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/inline_response_200_6'
+                type: object
+          description: OK
+    summary: |
+      The Security event message is used to indicate events that apply to a security.  A Security event message will be sent whenever such event occurs.
+  /deep/ssr-status:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/inline_response_200_1_ssrStatus'
+                type: object
+          description: OK
+    summary: |
+      In association with Rule 201 of Regulation SHO, the Short Sale Price  Test Message is used to indicate when a short sale price test restriction  is in effect for a security. IEX disseminates a full pre-market spin of Short  sale price test status messages indicating the Rule 201 status of all securities.  After the pre-market spin, IEX will use the Short sale price test status message  in the event of an intraday status change. The IEX Trading System will process orders  based on the latest short sale price test restriction status.
+  /deep/system-event:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
+          description: OK
+    summary: |
+      The system event message is used to indicate events that apply  to the market or the data feed. There will be a single message  disseminated per channel for each System Event type within a given  trading session.
+  /tops:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_8'
+                type: array
+          description: OK
+    summary: |
+      Tops provides IEX's aggregated best quoted bid and offer position in near  real time for all securities on IEX's displayed limit order book. TOPS is  ideal for developers needing both quote and trade data. For an example of  an app that's using TOPS, see our TOPS viewer app.
+  /deep/trade-breaks:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: last
+        required: false
+        schema:
+          default: 20
+          maximum: 500
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  items:
+                    $ref: '#/components/schemas/trade'
+                  type: array
+                type: object
+          description: OK
+    summary: |
+      Trade break messages are sent when an execution on IEX is broken on that same trading day.  Trade breaks are rare and only affect applications that rely upon IEX execution based data.
+  /deep/trades:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: last
+        required: false
+        schema:
+          default: 20
+          maximum: 500
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  items:
+                    $ref: '#/components/schemas/trade'
+                  type: array
+                type: object
+          description: OK
+    summary: Trade report messages are sent when an order on the IEX ORder Book is
+      executed in whole or in part. DEEP sends a trade report message for every individual
+      fill.
+  /deep/trading-status:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: symbols
+        required: false
+        schema:
+          items:
+            type: string
+          maxItems: 10
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/inline_response_200_9'
+                type: object
+          description: OK
+    summary: "The Trading status message is used to indicate the current trading status\
+      \ of a security.  For IEX-listed securities, IEX acts as the primary market\
+      \ and has the authority to institute  a trading halt or trading pause in a security\
+      \ due to news dissemination or regulatory reasons.  For non-IEX-listed securities,\
+      \ IEX abides by any regulatory trading halts and trading pauses  instituted\
+      \ by the primary or listing market, as applicable.\n  IEX disseminates a full\
+      \ pre-market spin of Trading status messages indicating the trading \nstatus\
+      \ of all securities. In the spin, IEX will send out a Trading status message\
+      \ with “T”  (Trading) for all securities that are eligible for trading at the\
+      \ start of the Pre-Market Session.  If a security is absent from the dissemination,\
+      \ firms should assume that the security is being  treated as operationally halted\
+      \ in the IEX Trading System.\n  After the pre-market spin, IEX will use the\
+      \ Trading status message to relay changes in trading \nstatus for an individual\
+      \ security. Messages will be sent when a security is\n  * Halted\n  * Paused\n\
+      \  * Released into an Order Acceptance Period\n  * Released for trading\nThe\
+      \ paused and released into an Order Acceptance Period statuses will be disseminated\
+      \ for IEX-listed  securities only. Trading pauses on non-IEX-listed securities\
+      \ will be treated simply as a halt.\n"
+  /stats/historical/daily:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: last
+        required: false
+        schema:
+          maximum: 90
+          minimum: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: date
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_10'
+                type: array
+          description: OK
+    summary: This call will return daily stats for a given month or day.
+  /stats/historical:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: date
+        required: false
+        schema:
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/stats'
+                type: array
+          description: OK
+  /stats/intraday:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_11'
+          description: OK
+  /stats/recent:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_12'
+                type: array
+          description: OK
+    summary: This call will return a minimum of the last five trading days up to all
+      trading days of the current month.
+  /stats/records:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_13'
+          description: OK
+  /market:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_14'
+                type: array
+          description: OK
+    summary: This endpoint returns near real time traded volume on the markets. Market
+      data is captured by the IEX system from approximately 7:45am to 5:15pm ET.
+  /ref-data/daily-list/corporate-actions:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/corporateAction'
+                type: array
+          description: OK
+    summary: |
+      This call returns an array of new issues, symbol and name changes, and deleted issues,  as well as new firms, name changes, and deleted firms for IEX-listed securities. Records  are added once known by the Exchange and will be removed when the Effective Date is in  the past. Updates are posted once per hour from 8:00am to 6:00pm ET on each trading day.
+  /ref-data/daily-list/corporate-actions/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/corporateAction'
+                type: array
+          description: OK
+    summary: |
+      This call returns an array of new issues, symbol and name changes, and deleted issues,  as well as new firms, name changes, and deleted firms for IEX-listed securities. Records  are added once known by the Exchange and will be removed when the Effective Date is in  the past. Updates are posted once per hour from 8:00am to 6:00pm ET on each trading day.
+  /ref-data/daily-list/dividends:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/dividendCoreData'
+                  - properties:
+                      EventType:
+                        type: string
+                      DeclarationDate:
+                        type: string
+                      RecordDate:
+                        type: string
+                      PaymentDate:
+                        type: string
+                    type: object
+                type: array
+          description: OK
+    summary: |
+      This call details upcoming dividend information and other corporate actions, such as stock splits,  for IEX-listed securities. Records are added once known by the Exchange. A new record with the same  Record ID as a previously communicated record will appear when an existing record is being modified  or deleted by the Exchange. All records will be removed each evening. Updates are posted once per  hour from 8:00am to 6:00pm ET on each trading day.
+  /ref-data/daily-list/dividends/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/dividendCoreData'
+                  - properties:
+                      EventType:
+                        type: string
+                      DeclarationDate:
+                        type: string
+                      RecordDate:
+                        type: string
+                      PaymentDate:
+                        type: string
+                    type: object
+                type: array
+          description: OK
+    summary: |
+      This call details upcoming dividend information and other corporate actions, such as stock splits,  for IEX-listed securities. Records are added once known by the Exchange. A new record with the same  Record ID as a previously communicated record will appear when an existing record is being modified  or deleted by the Exchange. All records will be removed each evening. Updates are posted once per  hour from 8:00am to 6:00pm ET on each trading day.
+  /ref-data/daily-list/symbol-directory:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/listedSymbolData'
+                type: array
+          description: OK
+    summary: |
+      This call returns an array of IEX-lised securities and their corresponding  data fields. The IEX-Listed Symbol Directory Daily List is initially generated  and posted to the IEX website at 8:30pm ET before each trading day, and then  once per hour from 9pm until 6pm ET the following day.
+  /ref-data/daily-list/symbol-directory/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/listedSymbolData'
+                type: array
+          description: OK
+    summary: |
+      This call returns an array of IEX-lised securities and their corresponding  data fields. The IEX-Listed Symbol Directory Daily List is initially generated  and posted to the IEX website at 8:30pm ET before each trading day, and then  once per hour from 9pm until 6pm ET the following day.
+  /ref-data/daily-list/next-day-ex-date:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/dividendCoreData'
+                type: array
+          description: OK
+    summary: |
+      This call provides advance notification of dividend declarations impacting  IEX-listed securities. Records are added at 8:00am ET one trading day before  the specified Ex-Date. Records would have been communicated in the IEX dDividends  Daily List when they were added or modified by the Exchange. Records are removed  when Ex-Date is equal to today or when the record is deleted by the Exchange  (in this case, a new record will appear in the IEX Dividends Daily List with an  Event Type=DELETE for the affected Record ID).
+  /ref-data/daily-list/next-day-ex-date/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/dividendCoreData'
+                type: array
+          description: OK
+    summary: |
+      This call provides advance notification of dividend declarations impacting  IEX-listed securities. Records are added at 8:00am ET one trading day before  the specified Ex-Date. Records would have been communicated in the IEX dDividends  Daily List when they were added or modified by the Exchange. Records are removed  when Ex-Date is equal to today or when the record is deleted by the Exchange  (in this case, a new record will appear in the IEX Dividends Daily List with an  Event Type=DELETE for the affected Record ID).
+  /ref-data/symbols:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_15'
+                type: array
+          description: OK
+    summary: |
+      THis call returns an array of symbols IEX supports for trading.  This list is updated daily as of 7:45am ET. Symbols may be added  or removed by IEX after the list was produced.
+  /stock/{symbol}/batch:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: types
+        required: true
+        schema:
+          items:
+            enum:
+            - book
+            - chart
+            - company
+            - delayed-quote
+            - dividends
+            - earnings
+            - effective-spread
+            - financials
+            - short-interest
+            - stats
+            - largest-trades
+            - logo
+            - news
+            - ohlc
+            - peers
+            - previous
+            - price
+            - quote
+            - relevant
+            - splits
+            - time-series
+            - volume-by-venue
+            type: string
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: range
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - properties:
+                    book:
+                      properties:
+                        quote:
+                          $ref: '#/components/schemas/quote'
+                        bids:
+                          items:
+                            $ref: '#/components/schemas/order'
+                          type: array
+                        asks:
+                          items:
+                            $ref: '#/components/schemas/order'
+                          type: array
+                        trades:
+                          items:
+                            $ref: '#/components/schemas/trade'
+                          type: array
+                        systemEvent:
+                          $ref: '#/components/schemas/systemEvent'
+                      type: object
+                  type: object
+                - properties:
+                    chart:
+                      $ref: '#/components/schemas/chartAll'
+                  type: object
+                - properties:
+                    company:
+                      properties:
+                        symbol:
+                          type: string
+                        companyName:
+                          type: string
+                        exchange:
+                          type: string
+                        industry:
+                          type: string
+                        website:
+                          type: string
+                        description:
+                          type: string
+                        CEO:
+                          type: string
+                        issueType:
+                          description: refers to the common issue type of the stock
+                            \n * ad - American Depository Receipt (ADRs) * re - Real
+                            Estate Investment Trust (REITs) * ce - Closed end fund
+                            (Stock and Bond Fund) * si - Secondary issue * lp - Limited
+                            Partnerships * cs - Common Stock * et - Exchange Traded
+                            Fund (ETF) * (blank) - Not available, i.e. Warrant, Note,
+                            or (non-filing) Closed Ended Funds
+                          enum:
+                          - ad
+                          - re
+                          - ce
+                          - si
+                          - lp
+                          - cs
+                          - et
+                          - ""
+                          type: string
+                        sector:
+                          type: string
+                        tags:
+                          description: an array of strings used to classify the company
+                          items:
+                            $ref: '#/components/schemas/sector'
+                          type: array
+                      type: object
+                  type: object
+                - properties:
+                    delayed-quote:
+                      properties:
+                        symbol:
+                          type: string
+                        delayedPrice:
+                          nullable: true
+                          type: number
+                        delayedSize:
+                          nullable: true
+                          type: number
+                        delayedPriceTime:
+                          nullable: true
+                          type: number
+                        processedTime:
+                          nullable: true
+                          type: number
+                      type: object
+                  type: object
+                - properties:
+                    dividends:
+                      items:
+                        allOf:
+                        - $ref: '#/components/schemas/dividendCoreData'
+                        - properties:
+                            EventType:
+                              type: string
+                            DeclarationDate:
+                              type: string
+                            RecordDate:
+                              type: string
+                            PaymentDate:
+                              type: string
+                          type: object
+                      type: array
+                  type: object
+                - properties:
+                    earnings:
+                      $ref: '#/components/schemas/earnings'
+                  type: object
+                - properties:
+                    effective-spread:
+                      items:
+                        properties:
+                          volume:
+                            description: Refers to the eligible shares used for calculating
+                              `effectiveSpread` and `priceImprovement`
+                            nullable: true
+                            type: number
+                          venue:
+                            description: refers to the Market Identifier Code (MIC)
+                            type: string
+                          venueName:
+                            description: Refers to a readable version of the venue
+                              defined by IEX
+                            type: string
+                          effectiveSpread:
+                            description: is designed to measure marketable orders
+                              executed in relation to the market center's quoted spread
+                              and takes into account hidden and midpoint liquidity
+                              available at each market center in dollars
+                            nullable: true
+                            type: number
+                          effectiveQuoted:
+                            description: a ratio calculated by dividing a market center's
+                              effective spread by the NBBO quoted spread
+                            nullable: true
+                            type: number
+                          priceImprovement:
+                            description: the average amount of price improvement in
+                              dollars per eligible share executed
+                            nullable: true
+                            type: number
+                        type: object
+                      type: array
+                  type: object
+                - properties:
+                    financials:
+                      $ref: '#/components/schemas/financials'
+                  type: object
+                - properties:
+                    short-interest:
+                      $ref: '#/components/schemas/shortInterest'
+                  type: object
+                - properties:
+                    stats:
+                      $ref: '#/components/schemas/stats'
+                  type: object
+                - properties:
+                    largest-trades:
+                      items:
+                        properties:
+                          price:
+                            description: Refers to the price of the trade
+                            nullable: true
+                            type: number
+                          size:
+                            description: Refers to the number of shares of the trade
+                            nullable: true
+                            type: number
+                          time:
+                            description: Refers to the time of the trade
+                            nullable: true
+                            type: number
+                          timeLabel:
+                            description: formatted time string as HH:MM:SS
+                            pattern: (?:[01]|2(?=[0123]))\d:[012345]\d:[012345]\d
+                            type: string
+                          venue:
+                            description: Refers to the venue where the trade occured.
+                              `None` refers to a. TRF (off-exchange) trade
+                            type: string
+                          venueName:
+                            description: formatted venue name where the trade occured
+                            type: string
+                        type: object
+                      type: array
+                  type: object
+                - properties:
+                    logo:
+                      properties:
+                        url:
+                          type: string
+                      type: object
+                  type: object
+                - properties:
+                    news:
+                      items:
+                        $ref: '#/components/schemas/article'
+                      type: array
+                  type: object
+                - properties:
+                    ohlc:
+                      $ref: '#/components/schemas/ohlcData'
+                  type: object
+                - properties:
+                    peers:
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                - properties:
+                    previous:
+                      $ref: '#/components/schemas/priceData'
+                  type: object
+                - properties:
+                    price:
+                      type: number
+                  type: object
+                - properties:
+                    quote:
+                      $ref: '#/components/schemas/quote'
+                  type: object
+                - properties:
+                    relevant:
+                      properties:
+                        peers:
+                          type: boolean
+                        symbols:
+                          items:
+                            type: string
+                          type: array
+                      type: "null"
+                  type: object
+                - properties:
+                    splits:
+                      items:
+                        properties:
+                          exDate:
+                            description: Refers to the split ex-Date
+                            type: string
+                          declaredDate:
+                            description: Refers to the split declaration date
+                            type: string
+                          recordDate:
+                            description: Refers to the split record date
+                            type: string
+                          paymentDate:
+                            description: Refers to the split payment date
+                            type: string
+                          ratio:
+                            description: Refers to the split ration. The split ration
+                              is an inverse of the number  of shares that a holder
+                              of the stock would have after the split divided  by
+                              the number of shares that the holder had before.
+                            nullable: true
+                            type: number
+                          toFactor:
+                            description: To factor of the split. Used to calculate
+                              the split `ratio` forfactor/tofactor = `ratio` (e.g.
+                              1/2 = 0.5)
+                            type: string
+                          forFactor:
+                            description: For factor of the split. Used to calculate
+                              the split `ratio` forfactor/tofactor = `ratio` (e.g.
+                              1/2 = 0.5)
+                            type: string
+                        type: object
+                      type: array
+                  type: object
+                - properties:
+                    time-series:
+                      type: object
+                  type: object
+                - properties:
+                    volume-by-venue:
+                      items:
+                        properties:
+                          volume:
+                            description: Refers to the current day, 15 minute delayed
+                              volume
+                            nullable: true
+                            type: number
+                          venue:
+                            description: Refeers to the Market Identifier Code (MIC)
+                            type: string
+                          venueName:
+                            description: Refers to a readable version of the venue
+                              defined by IEX
+                            type: string
+                          date:
+                            description: Refers to the date the data was last updated
+                              in the format `YYYY-MM-DD`
+                            format: date
+                            type: string
+                          marketPercent:
+                            description: Refers tot the 15 minute delayed percent
+                              of total stock volume traded by the venue
+                            nullable: true
+                            type: number
+                          avgMarketPercent:
+                            description: Refers to the 30 day average percent of total
+                              stock volume traded by the venue
+                            nullable: true
+                            type: number
+                        type: object
+                      type: array
+                  type: object
+          description: OK
+  /stock/{symbol}/book:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_16'
+          description: OK
+    summary: |
+      Response includes data from deep and quote.  Refer to each endpoint for details.
+  /stock/{symbol}/chart/{range}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: range
+        required: true
+        schema:
+          enum:
+          - 5y
+          - 2y
+          - 1y
+          - ytd
+          - 6m
+          - 3m
+          - 1m
+          type: string
+        style: simple
+      - description: If true, 1d chart will reset at midnight instead of the default
+          behavior of 9:30am ET.
+        explode: true
+        in: query
+        name: chartReset
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If true, runs a polyline simplification using the Douglas-Peucker
+          algorithm. This is useful if plotting sparkline charts.
+        explode: true
+        in: query
+        name: chartSimplify
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return every Nth element as defined
+          by chartInterval.
+        explode: true
+        in: query
+        name: chartInterval
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: If true, `changeOverTime` and `marketChangeOverTime` will be
+          relative to previous day close instead of the first value.
+        explode: true
+        in: query
+        name: changeFromClose
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return the last N elements.
+        explode: true
+        in: query
+        name: chartLast
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/chartAll'
+                  - $ref: '#/components/schemas/chartNot1d'
+                type: array
+          description: OK
+  /stock/{symbol}/chart/1d:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: If true, 1d chart will reset at midnight instead of the default
+          behavior of 9:30am ET.
+        explode: true
+        in: query
+        name: chartReset
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If true, runs a polyline simplification using the Douglas-Peucker
+          algorithm. This is useful if plotting sparkline charts.
+        explode: true
+        in: query
+        name: chartSimplify
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return every Nth element as defined
+          by chartInterval.
+        explode: true
+        in: query
+        name: chartInterval
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: If true, `changeOverTime` and `marketChangeOverTime` will be
+          relative to previous day close instead of the first value.
+        explode: true
+        in: query
+        name: changeFromClose
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return the last N elements.
+        explode: true
+        in: query
+        name: chartLast
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/chartAll'
+                  - $ref: '#/components/schemas/chart1d'
+                type: array
+          description: OK
+    summary: |
+      IEX-only data by minute
+  /stock/{symbol}/chart/date/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+          type: string
+        style: simple
+      - description: If true, 1d chart will reset at midnight instead of the default
+          behavior of 9:30am ET.
+        explode: true
+        in: query
+        name: chartReset
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If true, runs a polyline simplification using the Douglas-Peucker
+          algorithm. This is useful if plotting sparkline charts.
+        explode: true
+        in: query
+        name: chartSimplify
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return every Nth element as defined
+          by chartInterval.
+        explode: true
+        in: query
+        name: chartInterval
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: If true, `changeOverTime` and `marketChangeOverTime` will be
+          relative to previous day close instead of the first value.
+        explode: true
+        in: query
+        name: changeFromClose
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return the last N elements.
+        explode: true
+        in: query
+        name: chartLast
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/chartAll'
+                - $ref: '#/components/schemas/chartNot1d'
+          description: OK
+    summary: |
+      IEX-only data by minute for a specifid date in the format `YYYYMMDD` if available.  Currently supporting trailing 30 calendar days.
+  /stock/{symbol}/chart/dynamic:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: If true, 1d chart will reset at midnight instead of the default
+          behavior of 9:30am ET.
+        explode: true
+        in: query
+        name: chartReset
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If true, runs a polyline simplification using the Douglas-Peucker
+          algorithm. This is useful if plotting sparkline charts.
+        explode: true
+        in: query
+        name: chartSimplify
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return every Nth element as defined
+          by chartInterval.
+        explode: true
+        in: query
+        name: chartInterval
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: If true, `changeOverTime` and `marketChangeOverTime` will be
+          relative to previous day close instead of the first value.
+        explode: true
+        in: query
+        name: changeFromClose
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: If passed, chart data will return the last N elements.
+        explode: true
+        in: query
+        name: chartLast
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_17'
+          description: OK
+    summary: |
+      Will return `1d` or `1m` data depending on the day or week and time of day. Intraday per minute data is only returned during market hours.
+  /stock/market/collection/sector:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: collectionName
+        required: true
+        schema:
+          $ref: '#/components/schemas/sector'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/quote'
+                type: array
+          description: OK
+    summary: |
+      Returns an array of quote objects for a given sector.
+  /stock/market/collection/tag:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: collectionName
+        required: true
+        schema:
+          $ref: '#/components/schemas/sector'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/quote'
+                type: array
+          description: OK
+    summary: |
+      Returns an array of quote objects for a given tag.
+  /stock/market/collection/list:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: collectionName
+        required: true
+        schema:
+          $ref: '#/components/schemas/list'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/quote'
+                type: array
+          description: OK
+    summary: |
+      Returns an array of quote objects for a given list.
+  /stock/{symbol}/company:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_18'
+          description: OK
+  /stock/market/crypto:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/quote'
+                  - properties:
+                      bidPrice:
+                        description: Market bid price
+                        nullable: true
+                        type: number
+                      bidSize:
+                        description: Market bid size
+                        nullable: true
+                        type: number
+                      askPrice:
+                        description: Market ask price
+                        nullable: true
+                        type: number
+                      askSize:
+                        description: Market ask size
+                        nullable: true
+                        type: number
+                    type: object
+                type: array
+          description: OK
+    summary: |
+      This will return an array of quotes for all Cryptocurrencies supported by the IEX API. Each element is a standard `quote` object with four additional keys.
+  /stock/{symbol}/delayed-quote:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_19'
+          description: OK
+    summary: |
+      This returns the 15 minute delayed market quote.
+  /stock/{symbol}/dividends/{range}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: range
+        required: true
+        schema:
+          enum:
+          - 5y
+          - 2y
+          - 1y
+          - ytd
+          - 6m
+          - 3m
+          - 1m
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_20'
+                type: array
+          description: OK
+  /stock/{symbol}/earnings:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_21'
+          description: OK
+    summary: Pulls data from the four most recent reported quarters.
+  /stock/{symbol}/effective-spread:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_22'
+                type: array
+          description: OK
+    summary: |
+      This returns an array of effective spread, eligible volume, and price improvements of a stock, by market.  Unlike `volume-by-venue`, this will only return a venue if effective spread is not `N/A`.  Values are sorted in descending order by `effectiveSpread`. Lower `effectiveSpread` and higher `priceImprovement`  values are generally considered optimal.
+      Effective spread is designed to measure marketable orders executed in relation to the market center's  quoted spread and takes into account hidden and midpoint liquidity available at each market center.  Effective Spread is calculated by using eligible trade prices recorded to the consolidated tape and  comparing those trade prices to theNational Best Bid and Offer ("NBBO") at the time of the execution.
+      View the data disclaimer at the bottom of the stocks app for more information about how these values are calculated.
+  /stock/{symbol}/financials:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Allows you to specify annual or quarterly financials. Defaults
+          to quarterly. Values should be `annual` or `quarter`
+        explode: true
+        in: query
+        name: period
+        required: false
+        schema:
+          enum:
+          - annual
+          - quarter
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_23'
+          description: OK
+    summary: Pulls income statement, balance sheet, and cash flow data from the four
+      most recent reported quarters
+  /stock/market/threshold-securities:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_24'
+                type: array
+          description: OK
+    summary: |
+      The following are IEX-listed securities that have an aggregate fail to deliver position for five consecutive  settlement days at a registered clearing agency, totaling 10,000 shares or more and equal to at least 0.5%  of the issuer's total shares outstanding (i.e. 'threshold securities'). The report data will be published to the  IEX website daily at 8:30 p.m. ET with data for that trading day.
+  /stock/market/threshold-securities/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      - description: |
+          Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+        explode: true
+        in: query
+        name: token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_24'
+                type: array
+          description: OK
+    summary: |
+      The following are IEX-listed securities that have an aggregate fail to deliver position for five consecutive  settlement days at a registered clearing agency, totaling 10,000 shares or more and equal to at least 0.5%  of the issuer's total shares outstanding (i.e. 'threshold securities'). The report data will be published to the  IEX website daily at 8:30 p.m. ET with data for that trading day.
+  /stock/{symbol}/short-interest:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/shortInterest'
+                type: array
+          description: OK
+    summary: |
+      The consolidated market short interest poitions in all IEX-listed securities are included in the IEX Short Interest Report.  The report data will be published daily at 4:00pm ET.
+  /stock/{symbol}/short-interest/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/shortInterest'
+                type: array
+          description: OK
+    summary: |
+      The consolidated market short interest poitions in all IEX-listed securities are included in the IEX Short Interest Report.  The report data will be published daily at 4:00pm ET.
+  /stock/market/short-interest:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/shortInterest'
+                type: array
+          description: OK
+    summary: |
+      The consolidated market short interest poitions in all IEX-listed securities are included in the IEX Short Interest Report.  The report data will be published daily at 4:00pm ET.
+  /stock/market/short-interest/{date}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: date
+        required: true
+        schema:
+          pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: format
+        required: false
+        schema:
+          enum:
+          - csv
+          - psv
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/shortInterest'
+                type: array
+          description: OK
+    summary: |
+      The consolidated market short interest poitions in all IEX-listed securities are included in the IEX Short Interest Report.  The report data will be published daily at 4:00pm ET.
+  /stock/market/upcoming-ipos:
+    description: |
+      This returns a list of upcoming IPOs scheduled for the current and next month.  The response is split into two structures: `rawData` and `viewData`. `rawData` represent all available data for an IPO.  `viewData` represents data structured for display to a user.
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_25'
+          description: OK
+  /stock/market/today-ipos:
+    description: |
+      This returns a list of today IPOs scheduled for the current and next month.  The response is split into two structures: `rawData` and `viewData`. `rawData` represent all available data for an IPO.  `viewData` represents data structured for display to a user.
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_25'
+          description: OK
+  /stock/{symbol}/stats:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_26'
+          description: OK
+  /stock/{symbol}/largest-trades:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_27'
+                type: array
+          description: OK
+    summary: |
+      This returns 15 minute delayed, last sale eligible trades
+  /stock/market/list/{listType}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: listType
+        required: true
+        schema:
+          enum:
+          - mostactive
+          - gainers
+          - losers
+          - iexvolume
+          - iexpercent
+          - infocus
+          type: string
+        style: simple
+      - description: |
+          If set to `true`, all percentage values will be multiplied by a factor of 100  (e.g. /stock/aapl/quote?displayPercent=true)
+        explode: true
+        in: query
+        name: displayPercent
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/quote'
+                type: array
+          description: OK
+    summary: Returns an array of quotes for the top 10 symbols in a specified list
+  /stock/{symbol}/logo:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_28'
+          description: OK
+    summary: |
+      This is a helper function, but the Google API's url is standardized
+  /stock/{symbol}/news:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/article'
+                type: array
+          description: OK
+  /stock/{symbol}/news/last/{last}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: last
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/article'
+                type: array
+          description: OK
+  /stock/market/news:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/article'
+                type: array
+          description: OK
+  /stock/market/news/last/{last}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: last
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/article'
+                type: array
+          description: OK
+  /stock/{symbol}/ohlc:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ohlcData'
+          description: OK
+    summary: Returns the official open and close for a given symbol
+  /stock/market/ohlc:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/ohlcData'
+                type: object
+          description: OK
+    summary: Returns the official open and close for all symbols
+  /stock/{symbol}/peers:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+    summary: |
+      An array of peer tickers as defind by IEX. This is not intended to represent a  definitive or accurate list of peers, and is subject to change at any time.
+  /stock/{symbol}/previous:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/priceData'
+          description: OK
+    summary: |
+      This returns previous day adjusted price data for a single stock.
+  /stock/market/previous:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  $ref: '#/components/schemas/priceData'
+                type: object
+          description: OK
+    summary: |
+      This returns previous day adjusted price data keyed for the whole market.
+  /stock/{symbol}/price:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: number
+          description: OK
+    summary: |
+      A single number, being the IEX real time price, the 15 minute delayed market price,  or the previous close price, is returned.
+  /stock/{symbol}/quote:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: |
+          If set to `true`, all percentage values will be multiplied by a factor of 100.  (e.g. /stock/appl/quote?displayPercent=true)
+        explode: true
+        in: query
+        name: displayPercent
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+          description: OK
+  /stock/{symbol}/relevant:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_29'
+          description: OK
+    summary: |
+      Similar to the `peers` endpoint, except this will return most active market  symbols when peers are not available. If the symbols returned are not peers, the  `peers` key will be `false`. This is not intended to represent a definitive or  accurate list of peers, and is subject to change at any time.
+  /stock/market/sector-performance:
+    description: This returns an array of each sector and performance for the current
+      trading day. Performance is based on each sector ETF.
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_30'
+                type: array
+          description: OK
+  /stocks/{symbol}/splits/{range}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: range
+        required: true
+        schema:
+          enum:
+          - 5y
+          - 2y
+          - 1y
+          - ytd
+          - 6m
+          - 3m
+          - 1m
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_31'
+                type: array
+          description: OK
+  /stock/market/today-earnings:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_32'
+          description: OK
+    summary: |
+      Returns earinings that will be reported today as two arrays: before the open `bto` and after market close `amc`.  Each array contains an object with all keys from `earnings`, a `quote` object, and a `headline` key.
+  /stock/{symbol}/volume-by-venue:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: symbol
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_33'
+                type: array
+          description: OK
+    summary: |
+      This returns 15 minute delayed and 30 day average consolidated  volume percentage of a stock, by market. This call will always return 13 values,  and will be sorted in ascending order by current day trading volume percentage.
+components:
+  parameters:
+    date:
+      explode: false
+      in: path
+      name: date
+      required: true
+      schema:
+        pattern: (?:19|20)\d{2}(?:0(?=[^0])|1(?=[012]))\d((?:0(?=[^0]))|1|2|(?:3(?=[01])))\d
+        type: string
+      style: simple
+    format:
+      explode: true
+      in: query
+      name: format
+      required: false
+      schema:
+        enum:
+        - csv
+        - psv
+        type: string
+      style: form
+    formatCSV:
+      explode: true
+      in: query
+      name: format
+      required: false
+      schema:
+        enum:
+        - csv
+        type: string
+      style: form
+    token:
+      description: |
+        Value is the API token from your IEX user account. If you have been permissioned for CUSIP information you'll  receive a CUSIP field, otherwise data defaults to exclude CUSIP.
+      explode: true
+      in: query
+      name: token
+      required: false
+      schema:
+        type: string
+      style: form
+    symbol:
+      explode: false
+      in: path
+      name: symbol
+      required: true
+      schema:
+        type: string
+      style: simple
+    symbols:
+      explode: true
+      in: query
+      name: symbols
+      required: false
+      schema:
+        items:
+          type: string
+        maxItems: 10
+        type: array
+      style: form
+    last:
+      explode: true
+      in: query
+      name: last
+      required: false
+      schema:
+        default: 20
+        maximum: 500
+        minimum: 1
+        type: integer
+      style: form
+    range:
+      explode: false
+      in: path
+      name: range
+      required: true
+      schema:
+        enum:
+        - 5y
+        - 2y
+        - 1y
+        - ytd
+        - 6m
+        - 3m
+        - 1m
+        type: string
+      style: simple
+    chartReset:
+      description: If true, 1d chart will reset at midnight instead of the default
+        behavior of 9:30am ET.
+      explode: true
+      in: query
+      name: chartReset
+      required: false
+      schema:
+        type: boolean
+      style: form
+    chartSimplify:
+      description: If true, runs a polyline simplification using the Douglas-Peucker
+        algorithm. This is useful if plotting sparkline charts.
+      explode: true
+      in: query
+      name: chartSimplify
+      required: false
+      schema:
+        type: boolean
+      style: form
+    chartInterval:
+      description: If passed, chart data will return every Nth element as defined
+        by chartInterval.
+      explode: true
+      in: query
+      name: chartInterval
+      required: false
+      schema:
+        type: integer
+      style: form
+    changeFromClose:
+      description: If true, `changeOverTime` and `marketChangeOverTime` will be relative
+        to previous day close instead of the first value.
+      explode: true
+      in: query
+      name: changeFromClose
+      required: false
+      schema:
+        type: boolean
+      style: form
+    chartLast:
+      description: If passed, chart data will return the last N elements.
+      explode: true
+      in: query
+      name: chartLast
+      required: false
+      schema:
+        type: integer
+      style: form
+  schemas:
+    article:
+      example:
+        summary: summary
+        image: image
+        datetime: 2000-01-23T04:56:07.000+00:00
+        related: related
+        source: source
+        headline: headline
+        url: url
+      properties:
+        datetime:
+          format: date-time
+          type: string
+        headline:
+          type: string
+        source:
+          description: Source of the news article. Make sure to always attribute the
+            source
+          type: string
+        url:
+          type: string
+        summary:
+          type: string
+        related:
+          description: Comma-delimited list of tickers associated with this news article.
+            Not all tickers are available on the API. Make sure to check against available
+            `ref-data`
+          type: string
+        image:
+          description: URL of associated news image
+          type: string
+      type: object
+    auction:
+      properties:
+        auctionType:
+          description: refers to the auction type
+          enum:
+          - Open
+          - Close
+          - Halt Volatility
+          - IPO
+          type: string
+        pairedShares:
+          description: refers to the number of shares paired at the `referencePrice`
+            using order on the auction book
+          nullable: true
+          type: number
+        imbalanceShares:
+          description: refers to the number of unpaired shares at the `referencePrice`
+            using orders on the auction book
+          nullable: true
+          type: number
+        referencePrice:
+          description: refers to the clearing price at or within the reference price
+            range using order on the auction book
+          nullable: true
+          type: number
+        indicativePrice:
+          description: refers to the clearing price using eligible auction orders
+          nullable: true
+          type: number
+        auctionBookPrice:
+          description: refers to the clearing price using orders on the auction book
+          nullable: true
+          type: number
+        collarReferencePrice:
+          description: |
+            Refers to the reference price used for the auction collar, if any
+          nullable: true
+          type: number
+        lowerCollarPrice:
+          description: |
+            Refers to the lower threshold price of the auction collar, if any
+          nullable: true
+          type: number
+        upperCollarPrice:
+          description: |
+            Refers to the upper threshold price of the auction collar, if any
+          nullable: true
+          type: number
+        extensionNumber:
+          description: refers to the number of extensions an auction has received
+          nullable: true
+          type: number
+        startTime:
+          description: refers to the projected time of the auction match
+          pattern: (?:[01]|2(?=[0123]))\d:[012345]\d:[012345]\d
+          type: string
+        lastUpdate:
+          description: refers to the timestamp of the auction information
+          nullable: true
+          type: number
+      type: object
+    chart1d:
+      properties:
+        minute:
+          type: string
+        marketAverage:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketNotional:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketNumberOfTrades:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketOpen:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketClose:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketHigh:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketLow:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketVolume:
+          description: 15 minute delayed
+          nullable: true
+          type: number
+        marketChangeOverTime:
+          description: Percent change of each interval relative to first value. 15
+            minute delayed
+          nullable: true
+          type: number
+        average:
+          nullable: true
+          type: number
+        notional:
+          nullable: true
+          type: number
+        numberOfTrades:
+          nullable: true
+          type: number
+        simplifyFactor:
+          description: |
+            Only available when chartSimplify  is true. The first element is the original number of  points. Second element is how many remain after  simplification.
+          items:
+            nullable: true
+            type: number
+          maxItems: 2
+          minItems: 2
+          type: array
+      type: object
+    chartAll:
+      properties:
+        high:
+          description: is available on all charts.
+          nullable: true
+          type: number
+        low:
+          description: is available on all charts.
+          nullable: true
+          type: number
+        volume:
+          description: is available on all charts.
+          nullable: true
+          type: number
+        label:
+          description: is available on all charts. Percent change of each interval
+            relative to first value. Useful for comparing multiple stocks.
+          type: string
+        changeOverTime:
+          description: is available on all charts.
+          nullable: true
+          type: number
+        date:
+          description: is available on all charts.
+          type: string
+        open:
+          description: is available on all charts.
+          nullable: true
+          type: number
+        close:
+          description: is available on all charts.
+          nullable: true
+          type: number
+      type: object
+    chartNot1d:
+      properties:
+        unadjustedVolume:
+          nullable: true
+          type: number
+        change:
+          nullable: true
+          type: number
+        changePercent:
+          nullable: true
+          type: number
+        vwap:
+          nullable: true
+          type: number
+      type: object
+    corporateAction:
+      example:
+        NewFinancialStatus: NewFinancialStatus
+        NewLULDTierIndicator: NewLULDTierIndicator
+        CurrentSymbolinCMSSymbology: CurrentSymbolinCMSSymbology
+        NewSymbolinCMSSymbology: NewSymbolinCMSSymbology
+        DailyListTimestamp: DailyListTimestamp
+        NewSymbolinINETSymbology: NewSymbolinINETSymbology
+        HistoryHold: HistoryHold
+        IssueEvent: IssueEvent
+        NewSymbolinCQSSymbology: NewSymbolinCQSSymbology
+        CurrentLULDTierIndicator: CurrentLULDTierIndicator
+        CurrentRoundLotSize: CurrentRoundLotSize
+        CurrentListingCenter: CurrentListingCenter
+        SeparationDate: SeparationDate
+        DelistingReason: DelistingReason
+        NewRoundLotSize: NewRoundLotSize
+        CurrentSecurityName: CurrentSecurityName
+        MaturityDate: MaturityDate
+        WhenDistributedFlag: WhenDistributedFlag
+        CurrentSymbolinINETSymbology: CurrentSymbolinINETSymbology
+        CurrentCompanyName: CurrentCompanyName
+        CurrentFinancialStatus: CurrentFinancialStatus
+        WhenIssuedFlag: WhenIssuedFlag
+        IPOFlag: IPOFlag
+        CurrentSymbolinCQSSymbology: CurrentSymbolinCQSSymbology
+        NewSecurityName: NewSecurityName
+        NewListingCenter: NewListingCenter
+        ExpirationDate: ExpirationDate
+        SettlementDate: SettlementDate
+        RedemptionDate: RedemptionDate
+        RecordUpdateTime: RecordUpdateTime
+        NewCompanyName: NewCompanyName
+        RecordID: RecordID
+        NotesforEachEntry: NotesforEachEntry
+        EffectiveDate: EffectiveDate
+      properties:
+        RecordID:
+          type: string
+        DailyListTimestamp:
+          type: string
+        EffectiveDate:
+          type: string
+        IssueEvent:
+          type: string
+        CurrentSymbolinINETSymbology:
+          type: string
+        CurrentSymbolinCQSSymbology:
+          type: string
+        CurrentSymbolinCMSSymbology:
+          type: string
+        NewSymbolinINETSymbology:
+          type: string
+        NewSymbolinCQSSymbology:
+          type: string
+        NewSymbolinCMSSymbology:
+          type: string
+        CurrentSecurityName:
+          type: string
+        NewSecurityName:
+          type: string
+        CurrentCompanyName:
+          type: string
+        NewCompanyName:
+          type: string
+        CurrentListingCenter:
+          type: string
+        NewListingCenter:
+          type: string
+        DelistingReason:
+          type: string
+        CurrentRoundLotSize:
+          type: string
+        NewRoundLotSize:
+          type: string
+        CurrentLULDTierIndicator:
+          type: string
+        NewLULDTierIndicator:
+          type: string
+        ExpirationDate:
+          type: string
+        SeparationDate:
+          type: string
+        SettlementDate:
+          type: string
+        MaturityDate:
+          type: string
+        RedemptionDate:
+          type: string
+        CurrentFinancialStatus:
+          type: string
+        NewFinancialStatus:
+          type: string
+        WhenIssuedFlag:
+          type: string
+        WhenDistributedFlag:
+          type: string
+        IPOFlag:
+          type: string
+        HistoryHold:
+          type: string
+        NotesforEachEntry:
+          type: string
+        RecordUpdateTime:
+          type: string
+      type: object
+    dividendCoreData:
+      example:
+        AmountDescription: AmountDescription
+        DailyListTimestamp: DailyListTimestamp
+        PaymentFrequency: PaymentFrequency
+        StockAmount: StockAmount
+        ElectionorExpirationDate: ElectionorExpirationDate
+        BasisNotes: BasisNotes
+        SymbolyinCMSSymbology: SymbolyinCMSSymbology
+        DividendTypeID: DividendTypeID
+        CompanyName: CompanyName
+        SymbolinCQSSymbology: SymbolinCQSSymbology
+        PreSplitShares: PreSplitShares
+        NetAmount: NetAmount
+        SymbolinINETSymbology: SymbolinINETSymbology
+        ExDate: ExDate
+        RecordUpdateTime: RecordUpdateTime
+        PostSplitShares: PostSplitShares
+        RecordId: RecordId
+        ExercisePriceAmount: ExercisePriceAmount
+        QualifiedDividend: QualifiedDividend
+        GrossAmount: GrossAmount
+        NotesforEachEntry: NotesforEachEntry
+        SecurityName: SecurityName
+        CashAmount: CashAmount
+        StockAdjustmentFactor: StockAdjustmentFactor
+      properties:
+        RecordId:
+          type: string
+        DailyListTimestamp:
+          type: string
+        SymbolinINETSymbology:
+          type: string
+        SymbolinCQSSymbology:
+          type: string
+        SymbolyinCMSSymbology:
+          type: string
+        SecurityName:
+          type: string
+        CompanyName:
+          type: string
+        AmountDescription:
+          type: string
+        PaymentFrequency:
+          type: string
+        ExDate:
+          type: string
+        DividendTypeID:
+          type: string
+        StockAdjustmentFactor:
+          type: string
+        StockAmount:
+          type: string
+        CashAmount:
+          type: string
+        PostSplitShares:
+          type: string
+        PreSplitShares:
+          type: string
+        QualifiedDividend:
+          type: string
+        ExercisePriceAmount:
+          type: string
+        ElectionorExpirationDate:
+          type: string
+        GrossAmount:
+          type: string
+        NetAmount:
+          type: string
+        BasisNotes:
+          type: string
+        NotesforEachEntry:
+          type: string
+        RecordUpdateTime:
+          type: string
+      type: object
+    earnings:
+      example:
+        consensusEPS: 6.027456183070403
+        symbolId: 3.616076749251911
+        yearAgoChangePercent: 7.061401241503109
+        EPSReportDate: 2000-01-23
+        fiscalEndDate: 2000-01-23
+        numberOfEstimates: 5.962133916683182
+        announceTime: announceTime
+        fiscalPeriod: fiscalPeriod
+        estimatedChangePercent: 9.301444243932576
+        estimatedEPS: 1.4658129805029452
+        yearAgo: 2.3021358869347655
+        EPSSurpriseDollar: 5.637376656633329
+        actualEPS: 0.8008281904610115
+      properties:
+        actualEPS:
+          description: Actual earnings per share for the period
+          nullable: true
+          type: number
+        consensusEPS:
+          description: Consensus EPS estimate trend for the period
+          nullable: true
+          type: number
+        estimatedEPS:
+          description: Earinings per share estimate for the period
+          nullable: true
+          type: number
+        announceTime:
+          description: |
+            Time of earnings announcement:
+              * BTO = before open
+              * DMT = during trading
+              * AMC = after close
+          type: string
+        numberOfEstimates:
+          description: Number of estimates for the period
+          nullable: true
+          type: number
+        EPSSurpriseDollar:
+          description: Dollar amount of EPS surprise for the period
+          nullable: true
+          type: number
+        EPSReportDate:
+          description: Expected eariings report date `YYYY-MM-DD`
+          format: date
+          type: string
+        fiscalPeriod:
+          description: The fiscal quarter the earnings data applies to `Q# YYYY`
+          pattern: Q[1234] (?:19|20)\d{2}
+          type: string
+        fiscalEndDate:
+          description: Date representing the company fiscal quarter end `YYYY-MM-DD`
+          format: date
+          type: string
+        yearAgo:
+          description: Represents the EPS of the quarter a year ago
+          nullable: true
+          type: number
+        yearAgoChangePercent:
+          description: Represents the percent difference between the quarter a year
+            ago `actualEPS` and current period `actualEPS`.
+          nullable: true
+          type: number
+        estimatedChangePercent:
+          description: Represents the percent difference between the quarter a year
+            ago `actualEPS` and current period `estimatedEPS`
+          nullable: true
+          type: number
+        symbolId:
+          description: Represents the IEX id for the stock
+          nullable: true
+          type: number
+      type: object
+    financials:
+      example:
+        operatingIncome: 5.637376656633329
+        operatingExpense: 9.301444243932576
+        currentCash: 7.386281948385884
+        currentDebt: 1.2315135367772556
+        cashChange: 7.457744773683766
+        totalAssets: 2.027123023002322
+        totalDebt: 1.4894159098541704
+        totalLiabilities: 4.145608029883936
+        cashFlow: 1.1730742509559433
+        costOfRevenue: 6.027456183070403
+        currentAssets: 3.616076749251911
+        shareholderEquity: 6.84685269835264
+        researchAndDevelopment: 7.061401241503109
+        reportDate: reportDate
+        operatingRevenue: 1.4658129805029452
+        totalCash: 1.0246457001441578
+        operatingGainsLosses: operatingGainsLosses
+        netIncome: 2.3021358869347655
+        totalRevenue: 5.962133916683182
+        grossProfit: 0.8008281904610115
+      properties:
+        reportDate:
+          type: string
+        grossProfit:
+          nullable: true
+          type: number
+        costOfRevenue:
+          nullable: true
+          type: number
+        operatingRevenue:
+          nullable: true
+          type: number
+        totalRevenue:
+          nullable: true
+          type: number
+        operatingIncome:
+          nullable: true
+          type: number
+        netIncome:
+          nullable: true
+          type: number
+        researchAndDevelopment:
+          nullable: true
+          type: number
+        operatingExpense:
+          nullable: true
+          type: number
+        currentAssets:
+          nullable: true
+          type: number
+        totalAssets:
+          nullable: true
+          type: number
+        totalLiabilities:
+          nullable: true
+          type: number
+        currentCash:
+          nullable: true
+          type: number
+        currentDebt:
+          nullable: true
+          type: number
+        totalCash:
+          nullable: true
+          type: number
+        totalDebt:
+          nullable: true
+          type: number
+        shareholderEquity:
+          nullable: true
+          type: number
+        cashChange:
+          nullable: true
+          type: number
+        cashFlow:
+          nullable: true
+          type: number
+        operatingGainsLosses:
+          type: string
+      type: object
+    ipoRawData:
+      example:
+        symbol: symbol
+        cik: cik
+        shareholderShares: 9.301444243932576
+        lockupPeriodExpiration: lockupPeriodExpiration
+        totalAssets: 7.386281948385884
+        city: city
+        businessDescription: businessDescription
+        companyName: companyName
+        totalExpenses: 2.3021358869347655
+        competition: competition
+        expectedDate: expectedDate
+        underWriterCounsel:
+        - underWriterCounsel
+        - underWriterCounsel
+        ceo: ceo
+        priceHigh: 5.962133916683182
+        sharesOverAlloted: 7.061401241503109
+        stockholderEquity: 1.0246457001441578
+        leadUnderwriters:
+        - leadUnderwriters
+        - leadUnderwriters
+        priceLow: 1.4658129805029452
+        revenue: 2.027123023002322
+        sharesOffered: 6.027456183070403
+        state: state
+        sharesOutstanding: 3.616076749251911
+        zip: zip
+        percentOffered: 6.84685269835264
+        amount: 1.4894159098541704
+        address: address
+        companyDescription: companyDescription
+        auditor: auditor
+        totalLiabilities: 1.2315135367772556
+        quietPeriodExpiration: quietPeriodExpiration
+        useOfProceeds: useOfProceeds
+        url: url
+        market: market
+        phone: phone
+        companyCounsel:
+        - companyCounsel
+        - companyCounsel
+        offerAmount: 5.637376656633329
+        netIncome: 4.145608029883936
+        employees: 0.8008281904610115
+        underwriters:
+        - underwriters
+        - underwriters
+        status: status
+      properties:
+        symbol:
+          description: Refers to the IPO symbol
+          type: string
+        companyName:
+          description: Refers to the name of the IPO company
+          type: string
+        expectedDate:
+          description: Refers to the date the IPO is expected to start trading
+          type: string
+        leadUnderwriters:
+          description: refers to the list of investment banks leading the IPO
+          items:
+            type: string
+          type: array
+        underwriters:
+          description: refers to the list of investment banks underwriting the IPO
+          items:
+            type: string
+          type: array
+        companyCounsel:
+          description: refers to the list of legal firms representing the company
+          items:
+            type: string
+          type: array
+        underWriterCounsel:
+          description: refers to the list of legal firms representing the underwriter
+          items:
+            type: string
+          type: array
+        auditor:
+          description: Refers to the auditing firm for the company
+          type: string
+        market:
+          description: Refers to the exchange listing the IPO
+          type: string
+        cik:
+          description: Refers to the Central Index Key assigned by the SEC to identify
+            filings
+          type: string
+        address:
+          description: Refers to the company address
+          type: string
+        city:
+          description: Refers to the company city
+          type: string
+        state:
+          description: Refers to the company state
+          type: string
+        zip:
+          description: Refers to the company zip code
+          type: string
+        phone:
+          description: refers to the company phone number
+          type: string
+        ceo:
+          description: refers to the name of the company CEO
+          type: string
+        employees:
+          description: refers to the number of employees in the company
+          nullable: true
+          type: number
+        url:
+          description: refers to the URL of the company website
+          type: string
+        status:
+          description: Refers to the filing status of the SEC Form S-1
+          type: string
+        sharesOffered:
+          description: Refers to the number of shares offered in the IPO
+          nullable: true
+          type: number
+        priceLow:
+          description: |
+            Refers to the low end estimate of IPO share price. On the day of the IPO, this will be the syndicate price  which is used similarly to `previousClose` to determine change versus current price.
+          nullable: true
+          type: number
+        priceHigh:
+          description: |
+            Refers to the high end estimate of IPO share price. On the day of the IPO, this value may be null.
+          nullable: true
+          type: number
+        offerAmount:
+          description: Refers to the notional value of the IPO in dollars
+          nullable: true
+          type: number
+        totalExpenses:
+          description: Refers to company total expenses in dollars
+          nullable: true
+          type: number
+        sharesOverAlloted:
+          description: Refers to number of shares alloted by underwriters in excess
+            of IPO offering.
+          nullable: true
+          type: number
+        shareholderShares:
+          description: Refers to number of shares offered by existing shareholders
+          nullable: true
+          type: number
+        sharesOutstanding:
+          description: SRefers to the total number of company shares outstanding
+          nullable: true
+          type: number
+        lockupPeriodExpiration:
+          description: Refers to the date of insider lockup period expiration
+          type: string
+        quietPeriodExpiration:
+          description: Refers to the date following IPO when company quiet period
+            expires
+          type: string
+        revenue:
+          description: Refers to company revenue in dollars
+          nullable: true
+          type: number
+        netIncome:
+          description: Refers to company net income in dollars
+          nullable: true
+          type: number
+        totalAssets:
+          description: Refers to company total assets in dolars
+          nullable: true
+          type: number
+        totalLiabilities:
+          description: Refers to company total liabilities in dollars
+          nullable: true
+          type: number
+        stockholderEquity:
+          description: Refers to stock holder equity in dollars
+          nullable: true
+          type: number
+        companyDescription:
+          description: Description of the company
+          type: string
+        businessDescription:
+          description: description of the company's business
+          type: string
+        useOfProceeds:
+          description: description of the company's planned use of proceeds from the
+            IPO
+          type: string
+        competition:
+          description: description of the company's competition
+          type: string
+        amount:
+          description: Refers to the notional balue of sharees offered * average share
+            price in dollars
+          nullable: true
+          type: number
+        percentOffered:
+          description: Refers to the percent of outstanding shares being offered as
+            a whole number
+          nullable: true
+          type: number
+      type: object
+    ipoViewData:
+      example:
+        Float: Float
+        Expected: Expected
+        Company: Company
+        Price: Price
+        Percent: Percent
+        Symbol: Symbol
+        Amount: Amount
+        Shares: Shares
+        Market: Market
+      properties:
+        Company:
+          description: Refers to the name of the IPO company
+          type: string
+        Symbol:
+          description: Refers to the IPO symbol
+          type: string
+        Price:
+          description: Formatted as `$priceLow - priceHigh`
+          type: string
+        Shares:
+          description: Refers to the number of shares offered in the IPO
+          type: string
+        Amount:
+          description: Refers to the notional value of shares offered * average share
+            price in dollars
+          type: string
+        Float:
+          description: Refers to the total number of company shares outstanding
+          type: string
+        Percent:
+          description: Refers to the percent of outstanding shares being offered as
+            a whole number
+          type: string
+        Market:
+          description: Refers to the exchange listing the IPO
+          type: string
+        Expected:
+          description: REfers to the date the IPO is expected to start trading
+          type: string
+      type: object
+    list:
+      enum:
+      - mostactive
+      - gainers
+      - losers
+      - iexvolume
+      - iexpercent
+      - infocus
+      type: string
+    listedSymbolData:
+      example:
+        LeveragedETPFlag: LeveragedETPFlag
+        FirstDateListed: FirstDateListed
+        DailyListTimestamp: DailyListTimestamp
+        LeveragedETPRatio: LeveragedETPRatio
+        FinancialStatus: FinancialStatus
+        AdjustedPreviousOfficialClosingPrice: AdjustedPreviousOfficialClosingPrice
+        CompanyName: CompanyName
+        SymbolinCQSSymbology: SymbolinCQSSymbology
+        TransferAgent: TransferAgent
+        PreviousOfficialClosingPrice: PreviousOfficialClosingPrice
+        IssueDescription: IssueDescription
+        TestIssue: TestIssue
+        InverseETPFlag: InverseETPFlag
+        CountryofIncorporation: CountryofIncorporation
+        IssueType: IssueType
+        WhenDistributedFlag: WhenDistributedFlag
+        RoundLotSize: RoundLotSize
+        WhenIssuedFlag: WhenIssuedFlag
+        IPOFlag: IPOFlag
+        SymbolinINETSymbology: SymbolinINETSymbology
+        IssueSubType: IssueSubType
+        LULDTierIndicator: LULDTierIndicator
+        RecordUpdateTime: RecordUpdateTime
+        RecordID: RecordID
+        SymbolinCMSSymbology: SymbolinCMSSymbology
+        SICCode: SICCode
+        SecurityName: SecurityName
+      properties:
+        RecordID:
+          type: string
+        DailyListTimestamp:
+          type: string
+        SymbolinINETSymbology:
+          type: string
+        SymbolinCQSSymbology:
+          type: string
+        SymbolinCMSSymbology:
+          type: string
+        SecurityName:
+          type: string
+        CompanyName:
+          type: string
+        TestIssue:
+          type: string
+        IssueDescription:
+          type: string
+        IssueType:
+          type: string
+        IssueSubType:
+          type: string
+        SICCode:
+          type: string
+        TransferAgent:
+          type: string
+        FinancialStatus:
+          type: string
+        RoundLotSize:
+          type: string
+        PreviousOfficialClosingPrice:
+          type: string
+        AdjustedPreviousOfficialClosingPrice:
+          type: string
+        WhenIssuedFlag:
+          type: string
+        WhenDistributedFlag:
+          type: string
+        IPOFlag:
+          type: string
+        FirstDateListed:
+          type: string
+        LULDTierIndicator:
+          type: string
+        CountryofIncorporation:
+          type: string
+        LeveragedETPFlag:
+          type: string
+        LeveragedETPRatio:
+          type: string
+        InverseETPFlag:
+          type: string
+        RecordUpdateTime:
+          type: string
+      type: object
+    ohlcData:
+      example:
+        high: 5.637376656633329
+        low: 2.3021358869347655
+        close:
+          price: 1.4658129805029452
+          time: 5.962133916683182
+        open:
+          price: 0.8008281904610115
+          time: 6.027456183070403
+      properties:
+        open:
+          $ref: '#/components/schemas/ohlcData_open'
+        close:
+          $ref: '#/components/schemas/ohlcData_close'
+        high:
+          description: Refers to the market-wide highest price from the SIP (15 minute
+            delayed)
+          type: number
+        low:
+          description: Refers to the market-wide highest price from the SIP (15 minute
+            delayed)
+          type: number
+      type: object
+    order:
+      example:
+        size: 9.301444243932576
+        price: 7.061401241503109
+        timestamp: 3.616076749251911
+      properties:
+        price:
+          nullable: true
+          type: number
+        size:
+          nullable: true
+          type: number
+        timestamp:
+          nullable: true
+          type: number
+      type: object
+    priceData:
+      example:
+        date: 2000-01-23
+        volume: 5.637376656633329
+        symbol: symbol
+        high: 6.027456183070403
+        unadjustedVolume: 2.3021358869347655
+        low: 1.4658129805029452
+        change: 7.061401241503109
+        vwap: 3.616076749251911
+        changePercent: 9.301444243932576
+        close: 5.962133916683182
+        open: 0.8008281904610115
+      properties:
+        symbol:
+          description: Refers to the stock ticker.
+          type: string
+        date:
+          description: Refers to the date of the returned data in the format `YYYY-MM-DD`.
+          format: date
+          type: string
+        open:
+          nullable: true
+          type: number
+        high:
+          nullable: true
+          type: number
+        low:
+          nullable: true
+          type: number
+        close:
+          nullable: true
+          type: number
+        volume:
+          description: Adjusted for splits
+          nullable: true
+          type: number
+        unadjustedVolume:
+          nullable: true
+          type: number
+        change:
+          nullable: true
+          type: number
+        changePercent:
+          nullable: true
+          type: number
+        vwap:
+          description: Volume weighted average price
+          nullable: true
+          type: number
+      type: object
+    quote:
+      example:
+        symbol: symbol
+        avgTotalVolume: 8.762042012749001
+        companyName: companyName
+        iexRealtimePrice: 2.027123023002322
+        delayedPrice: 1.2315135367772556
+        iexMarketPercent: 9.369310271410669
+        calculationPrice: tops
+        extendedChangePercent: 7.457744773683766
+        latestSource: IEX real time price
+        primaryExchange: primaryExchange
+        latestUpdate: 9.301444243932576
+        iexBidPrice: 9.018348186070783
+        previousClose: 4.965218492984954
+        high: 5.637376656633329
+        peRatio: 2.8841621266687802
+        low: 2.3021358869347655
+        delayedPriceTime: 1.0246457001441578
+        extendedPrice: 1.4894159098541704
+        extendedPriceTime: 1.1730742509559433
+        week52Low: 6.878052220127876
+        closeTime: 5.962133916683182
+        changePercent: 9.965781217890562
+        week52High: 6.778324963048013
+        openTime: 6.027456183070403
+        sector: sector
+        close: 1.4658129805029452
+        latestPrice: 7.061401241503109
+        marketCap: 1.284659006116532
+        iexRealtimeSize: 4.145608029883936
+        iexLastUpdated: 7.386281948385884
+        change: 5.025004791520295
+        latestVolume: 3.616076749251911
+        iexAskPrice: 3.5571952270680973
+        ytdChange: 5.944895607614016
+        iexVolume: 6.683562403749608
+        iexAskSize: 6.965117697638846
+        extendedChange: 6.84685269835264
+        latestTime: latestTime
+        open: 0.8008281904610115
+        iexBidSize: 6.438423552598547
+      properties:
+        symbol:
+          description: Refers to the stock ticker
+          type: string
+        companyName:
+          description: Refers to the company name
+          type: string
+        primaryExchange:
+          description: Refers to the primary listings exchange
+          type: string
+        sector:
+          description: Refers to the sector of the stock
+          type: string
+        calculationPrice:
+          description: Refers to the source of the latest price
+          enum:
+          - tops
+          - sip
+          - previousclose
+          - close
+          type: string
+        open:
+          description: Refers to the official open price
+          nullable: true
+          type: number
+        openTime:
+          description: Refers to the official listing exchange time for the open
+          nullable: true
+          type: number
+        close:
+          description: Refers to the official close price
+          nullable: true
+          type: number
+        closeTime:
+          description: Refers to the official listing exchange time for the close
+          nullable: true
+          type: number
+        high:
+          description: Refers to the market-wide highest price from the SIP.
+          nullable: true
+          type: number
+        low:
+          description: Refers to the market-wide lowest price from the SIP.
+          nullable: true
+          type: number
+        latestPrice:
+          description: |
+            Refers to the latest price being the IEX real time price,  the 15 minute delayed market price, or the previous close price
+          nullable: true
+          type: number
+        latestSource:
+          description: Refers to the source of `latestPrice`.
+          enum:
+          - IEX real time price
+          - 15 minute delayed price
+          - Close
+          - Previous close
+          type: string
+        latestTime:
+          description: Refers to a human readable time of the `latestPrice`. The format
+            will vary based on `latestSource`.
+          type: string
+        latestUpdate:
+          description: |
+            Refers to the update time of `latestPrice` in milliseconds since midnight Jan 1, 1970.
+          nullable: true
+          type: number
+        latestVolume:
+          description: Refers to the total market volume of the stock.
+          nullable: true
+          type: number
+        iexRealtimePrice:
+          description: Refers to last sale price of the stock on IEX. (Refer to the
+            attribution section.)
+          nullable: true
+          type: number
+        iexRealtimeSize:
+          description: Refers to the last sale size of the stock on IEX.
+          nullable: true
+          type: number
+        iexLastUpdated:
+          description: |
+            Refers to the last update time of the data in milliseconds since midnight  Jan 1, 1950 UTC or `-1` or `0`. If the value is `-1' or `0`,  IEX has not quoted the symbol in the trading day.
+          nullable: true
+          type: number
+        delayedPrice:
+          description: Refers to the 15 minute delayed market price during normal
+            market hours 9:30 - 16:00.
+          nullable: true
+          type: number
+        delayedPriceTime:
+          description: Refers to the time of the delayed market price during normal
+            market hours 9:30 -16:00.
+          nullable: true
+          type: number
+        extendedPrice:
+          description: Refers to the 15 minuted delayed market price outside normal
+            market hours 8:00 - 9:30 and 16:00 - 17:00.
+          nullable: true
+          type: number
+        extendedChange:
+          description: Is calculated using `extendedPrice` from `calculationPrice`.
+          nullable: true
+          type: number
+        extendedChangePercent:
+          description: Is calculated using `extendedPrice` from `calculationPrice`.
+          nullable: true
+          type: number
+        extendedPriceTime:
+          description: Refers to the time of the delayed market price outside normal
+            market hours 8:00 - 9:30 and 16:00 - 17:00.
+          nullable: true
+          type: number
+        previousClose:
+          nullable: true
+          type: number
+        change:
+          description: Is calculated using `calculationPrice` from `previousClose`.
+          nullable: true
+          type: number
+        changePercent:
+          description: Is calculated using `calculationPrice` from `previousClose`.
+          nullable: true
+          type: number
+        iexMarketPercent:
+          description: refers to IEX's percentage of the market in the stock.
+          nullable: true
+          type: number
+        iexVolume:
+          description: refers to shares traded in the stock on IEX.
+          nullable: true
+          type: number
+        avgTotalVolume:
+          description: Refers to the 30 day average volume on all markets.
+          nullable: true
+          type: number
+        iexBidPrice:
+          description: Refers to the best bid price on IEX.
+          nullable: true
+          type: number
+        iexBidSize:
+          description: Refers to the amount of shares on the bid on IEX.
+          nullable: true
+          type: number
+        iexAskPrice:
+          description: Refers to the best ask price on IEX.
+          nullable: true
+          type: number
+        iexAskSize:
+          description: Refers to the amount of shares on the ask on IEX.
+          nullable: true
+          type: number
+        marketCap:
+          description: Is calculated in real time using `calculationPrice`.
+          nullable: true
+          type: number
+        peRatio:
+          description: Is calculated in real time using `calculationPrice`.
+          nullable: true
+          type: number
+        week52High:
+          description: Refers to the adjusted 52 week high.
+          nullable: true
+          type: number
+        week52Low:
+          description: Refers to the adjusted 52 week low.
+          nullable: true
+          type: number
+        ytdChange:
+          description: Refers to the price change percentage from start of year to
+            previous close.
+          nullable: true
+          type: number
+      type: object
+    recordedValue:
+      example:
+        recordDate: recordDate
+        avg30Value: 1.4658129805029452
+        previousDayValue: 6.027456183070403
+        recordValue: 0.8008281904610115
+      properties:
+        recordValue:
+          nullable: true
+          type: number
+        recordDate:
+          type: string
+        previousDayValue:
+          nullable: true
+          type: number
+        avg30Value:
+          nullable: true
+          type: number
+      type: object
+    sector:
+      enum:
+      - Consumer Staples
+      - Utilities
+      - Real Estate
+      - Energy
+      - Health Care
+      - Financials
+      - Industrials
+      - Consumer Discretionary
+      - Materials
+      - Technology
+      - Communication Services
+      type: string
+    shortInterest:
+      example:
+        PercentChange: 1.4658129805029452
+        AverageDailyVolume: 5.962133916683182
+        PreviousShortInterest: 6.027456183070403
+        NewIssueFlag: NewIssueFlag
+        StockAdjustmentFlag: StockAdjustmentFlag
+        DaystoCover: 5.637376656633329
+        CompanyName: CompanyName
+        SymbolinCQSSymbology: SymbolinCQSSymbology
+        SettlementDate: SettlementDate
+        SymbolinINETSymbology: SymbolinINETSymbology
+        CurrentShortIntereste: 0.8008281904610115
+        RevisionFlag: RevisionFlag
+        SymbolinCMSSymbology: SymbolinCMSSymbology
+        SecurityName: SecurityName
+      properties:
+        SettlementDate:
+          type: string
+        SecurityName:
+          type: string
+        CurrentShortIntereste:
+          nullable: true
+          type: number
+        PreviousShortInterest:
+          nullable: true
+          type: number
+        PercentChange:
+          nullable: true
+          type: number
+        AverageDailyVolume:
+          nullable: true
+          type: number
+        DaystoCover:
+          nullable: true
+          type: number
+        StockAdjustmentFlag:
+          type: string
+        RevisionFlag:
+          type: string
+        SymbolinINETSymbology:
+          type: string
+        SymbolinCQSSymbology:
+          type: string
+        SymbolinCMSSymbology:
+          type: string
+        NewIssueFlag:
+          type: string
+        CompanyName:
+          type: string
+      type: object
+    stats:
+      example:
+        venueEDGAFirstWaveRate: 0.10263654006109402
+        venueARCXFirstWaveWeight: 9.018348186070783
+        venueXPHLFirstWaveWeight: 7.143538047012306
+        venueEDGXFirstWaveWeight: 1.284659006116532
+        averageDailyVolume: 0.8008281904610115
+        smallCapPercent: 8.762042012749001
+        bin200Percent: 9.301444243932576
+        venueBATSFirstWaveWeight: 6.438423552598547
+        venueXCHIFirstWaveWeight: 5.944895607614016
+        venueXNGSFirstWaveRate: 5.533258397034986
+        venueEDGAFirstWaveWeight: 6.965117697638846
+        venueOverallFirstWaveRate: 8.969578798196912
+        bin20000Trades: 6.84685269835264
+        bin500Percent: 4.145608029883936
+        midCapPercent: 6.683562403749608
+        bin300Percent: 3.616076749251911
+        venueARCXFirstWaveRate: 0.8851374739011653
+        averageFillSize: 5.637376656633329
+        bin50000Trades: 7.457744773683766
+        venueBATYFirstWaveRate: 6.519180951018382
+        bin1000Percent: 7.386281948385884
+        venueXASEFirstWaveWeight: 6.778324963048013
+        bin10000Trades: 1.4894159098541704
+        bin101Percent: 7.061401241503109
+        venueXCHIFirstWaveRate: 3.0576100241049344
+        venueEDGXFirstWaveRate: 4.652396432933246
+        bin400Percent: 2.027123023002322
+        largeCapPercent: 9.369310271410669
+        venueXCISFirstWaveRate: 7.04836565559697
+        venueXPHLFirstWaveRate: 4.078845849666752
+        averageMarketShare: 1.4658129805029452
+        averageDailyRoutedVolume: 6.027456183070403
+        venueBATYFirstWaveWeight: 3.5571952270680973
+        venueXCISFirstWaveWeight: 6.704019297950036
+        venueBATSFirstWaveRate: 7.058770351582356
+        blockPercent: 4.965218492984954
+        venueXASEFirstWaveRate: 7.740351818741173
+        etfPercent: 9.965781217890562
+        uniqueSymbolsTraded: 1.1730742509559433
+        venueXNYSFirstWaveRate: 3.2588565619047607
+        selfCrossPercent: 5.025004791520295
+        venueXBOSFirstWaveRate: 3.0205796992916243
+        bin10000Percent: 1.0246457001441578
+        bin5000Percent: 1.2315135367772556
+        venueXNGSFirstWaveWeight: 3.353193347011243
+        venueXNYSFirstWaveWeight: 3.0937452626664474
+        venueOverallFirstWaveWeight: 2.8841621266687802
+        venueXBOSFirstWaveWeight: 6.878052220127876
+        averageOrderSize: 5.962133916683182
+        bin100Percent: 2.3021358869347655
+      properties:
+        averageDailyVolume:
+          nullable: true
+          type: number
+        averageDailyRoutedVolume:
+          nullable: true
+          type: number
+        averageMarketShare:
+          nullable: true
+          type: number
+        averageOrderSize:
+          nullable: true
+          type: number
+        averageFillSize:
+          nullable: true
+          type: number
+        bin100Percent:
+          nullable: true
+          type: number
+        bin101Percent:
+          nullable: true
+          type: number
+        bin200Percent:
+          nullable: true
+          type: number
+        bin300Percent:
+          nullable: true
+          type: number
+        bin400Percent:
+          nullable: true
+          type: number
+        bin500Percent:
+          nullable: true
+          type: number
+        bin1000Percent:
+          nullable: true
+          type: number
+        bin5000Percent:
+          nullable: true
+          type: number
+        bin10000Percent:
+          nullable: true
+          type: number
+        bin10000Trades:
+          nullable: true
+          type: number
+        bin20000Trades:
+          nullable: true
+          type: number
+        bin50000Trades:
+          nullable: true
+          type: number
+        uniqueSymbolsTraded:
+          nullable: true
+          type: number
+        blockPercent:
+          nullable: true
+          type: number
+        selfCrossPercent:
+          nullable: true
+          type: number
+        etfPercent:
+          nullable: true
+          type: number
+        largeCapPercent:
+          nullable: true
+          type: number
+        midCapPercent:
+          nullable: true
+          type: number
+        smallCapPercent:
+          nullable: true
+          type: number
+        venueARCXFirstWaveWeight:
+          nullable: true
+          type: number
+        venueBATSFirstWaveWeight:
+          nullable: true
+          type: number
+        venueBATYFirstWaveWeight:
+          nullable: true
+          type: number
+        venueEDGAFirstWaveWeight:
+          nullable: true
+          type: number
+        venueEDGXFirstWaveWeight:
+          nullable: true
+          type: number
+        venueOverallFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXASEFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXBOSFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXCHIFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXCISFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXNGSFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXNYSFirstWaveWeight:
+          nullable: true
+          type: number
+        venueXPHLFirstWaveWeight:
+          nullable: true
+          type: number
+        venueARCXFirstWaveRate:
+          nullable: true
+          type: number
+        venueBATSFirstWaveRate:
+          nullable: true
+          type: number
+        venueBATYFirstWaveRate:
+          nullable: true
+          type: number
+        venueEDGAFirstWaveRate:
+          nullable: true
+          type: number
+        venueEDGXFirstWaveRate:
+          nullable: true
+          type: number
+        venueOverallFirstWaveRate:
+          nullable: true
+          type: number
+        venueXASEFirstWaveRate:
+          nullable: true
+          type: number
+        venueXBOSFirstWaveRate:
+          nullable: true
+          type: number
+        venueXCHIFirstWaveRate:
+          nullable: true
+          type: number
+        venueXCISFirstWaveRate:
+          nullable: true
+          type: number
+        venueXNGSFirstWaveRate:
+          nullable: true
+          type: number
+        venueXNYSFirstWaveRate:
+          nullable: true
+          type: number
+        venueXPHLFirstWaveRate:
+          nullable: true
+          type: number
+      type: object
+    systemEvent:
+      example:
+        systemEvent: O
+        timestamp: 2.027123023002322
+      properties:
+        systemEvent:
+          description: |
+            The System event message is used to indicate events that apply to the market or the data feed. There will be a single message disseminated  per channel for each System Event type within a given trading  session. values:
+              * `O` - start of message
+              * `S` - start of system hours
+              * `R` - start of regular market hours
+              * `M` - end of regular market hours
+              * `E` - end of system hours
+              * `C` - end of message
+          enum:
+          - O
+          - S
+          - R
+          - M
+          - E
+          - C
+          type: string
+        timestamp:
+          nullable: true
+          type: number
+      type: object
+    timestampedValue:
+      example:
+        lastUpdated: 6.027456183070403
+        value: 0.8008281904610115
+      properties:
+        value:
+          nullable: true
+          type: number
+        lastUpdated:
+          nullable: true
+          type: number
+      type: object
+    todayEarnings:
+      allOf:
+      - $ref: '#/components/schemas/earnings'
+      - $ref: '#/components/schemas/todayEarnings_allOf'
+    trade:
+      example:
+        size: 6.84685269835264
+        price: 1.4894159098541704
+        isISO: true
+        isSinglePriceCross: true
+        isOutsideRegularHours: true
+        isTradeThroughExempt: true
+        isOddLot: true
+        tradeId: 7.457744773683766
+        timestamp: 1.1730742509559433
+      properties:
+        price:
+          nullable: true
+          type: number
+        size:
+          nullable: true
+          type: number
+        tradeId:
+          nullable: true
+          type: number
+        isISO:
+          type: boolean
+        isOddLot:
+          type: boolean
+        isOutsideRegularHours:
+          type: boolean
+        isSinglePriceCross:
+          type: boolean
+        isTradeThroughExempt:
+          type: boolean
+        timestamp:
+          nullable: true
+          type: number
+      type: object
+    inline_response_200:
+      properties:
+        bids:
+          items:
+            $ref: '#/components/schemas/order'
+          type: array
+        asks:
+          items:
+            $ref: '#/components/schemas/order'
+          type: array
+    inline_response_200_1_tradingStatus:
+      example:
+        reason: reason
+        status: status
+        timestamp: 4.145608029883936
+      properties:
+        status:
+          type: string
+        reason:
+          type: string
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_1_opHaltStatus:
+      example:
+        isHalted: true
+        timestamp: 7.386281948385884
+      properties:
+        isHalted:
+          type: boolean
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_1_ssrStatus:
+      example:
+        isSSR: true
+        detail: detail
+        timestamp: 1.2315135367772556
+      properties:
+        isSSR:
+          type: boolean
+        detail:
+          type: string
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_1_securityEvent:
+      example:
+        securityEvent: securityEvent
+        timestamp: 1.0246457001441578
+      properties:
+        securityEvent:
+          type: string
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_1_tradeBreaks:
+      example:
+        size: 5.025004791520295
+        price: 4.965218492984954
+        isISO: true
+        isSinglePriceCross: true
+        isOutsideRegularHours: true
+        isTradeThroughExempt: true
+        isOddLot: true
+        tradeId: 9.965781217890562
+        timestamp: 9.369310271410669
+      properties:
+        price:
+          nullable: true
+          type: number
+        size:
+          nullable: true
+          type: number
+        tradeId:
+          nullable: true
+          type: number
+        isISO:
+          type: boolean
+        isOddLot:
+          type: boolean
+        isOutsideRegularHours:
+          type: boolean
+        isSinglePriceCross:
+          type: boolean
+        isTradeThroughExempt:
+          type: boolean
+        timestamp:
+          type: number
+    inline_response_200_1_auction:
+      example:
+        auctionBookProce: 3.5571952270680973
+        referencePrice: 9.018348186070783
+        imbalanceShares: 8.762042012749001
+        indicativePrice: 6.438423552598547
+        collarReferencePrice: 6.965117697638846
+        pairedShares: 6.683562403749608
+        extensionNumber: 6.778324963048013
+        lastUpdate: 6.878052220127876
+        upperCollarPrice: 2.8841621266687802
+        startTime: startTime
+        auctionType: auctionType
+        lowerCollarPrice: 1.284659006116532
+      properties:
+        auctionType:
+          type: string
+        pairedShares:
+          nullable: true
+          type: number
+        imbalanceShares:
+          nullable: true
+          type: number
+        referencePrice:
+          nullable: true
+          type: number
+        indicativePrice:
+          nullable: true
+          type: number
+        auctionBookProce:
+          nullable: true
+          type: number
+        collarReferencePrice:
+          nullable: true
+          type: number
+        lowerCollarPrice:
+          nullable: true
+          type: number
+        upperCollarPrice:
+          nullable: true
+          type: number
+        extensionNumber:
+          nullable: true
+          type: number
+        startTime:
+          type: string
+        lastUpdate:
+          nullable: true
+          type: number
+    inline_response_200_1:
+      example:
+        symbol: symbol
+        securityEvent:
+          securityEvent: securityEvent
+          timestamp: 1.0246457001441578
+        marketPercent: 0.8008281904610115
+        lastSaleSize: 5.962133916683182
+        trades:
+        - size: 6.84685269835264
+          price: 1.4894159098541704
+          isISO: true
+          isSinglePriceCross: true
+          isOutsideRegularHours: true
+          isTradeThroughExempt: true
+          isOddLot: true
+          tradeId: 7.457744773683766
+          timestamp: 1.1730742509559433
+        - size: 6.84685269835264
+          price: 1.4894159098541704
+          isISO: true
+          isSinglePriceCross: true
+          isOutsideRegularHours: true
+          isTradeThroughExempt: true
+          isOddLot: true
+          tradeId: 7.457744773683766
+          timestamp: 1.1730742509559433
+        tradingStatus:
+          reason: reason
+          status: status
+          timestamp: 4.145608029883936
+        auction:
+          auctionBookProce: 3.5571952270680973
+          referencePrice: 9.018348186070783
+          imbalanceShares: 8.762042012749001
+          indicativePrice: 6.438423552598547
+          collarReferencePrice: 6.965117697638846
+          pairedShares: 6.683562403749608
+          extensionNumber: 6.778324963048013
+          lastUpdate: 6.878052220127876
+          upperCollarPrice: 2.8841621266687802
+          startTime: startTime
+          auctionType: auctionType
+          lowerCollarPrice: 1.284659006116532
+        volume: 6.027456183070403
+        lastSaleTime: 5.637376656633329
+        lastUpdated: 2.3021358869347655
+        asks:
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        bids:
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        systemEvent:
+        - systemEvent: O
+          timestamp: 2.027123023002322
+        - systemEvent: O
+          timestamp: 2.027123023002322
+        ssrStatus:
+          isSSR: true
+          detail: detail
+          timestamp: 1.2315135367772556
+        opHaltStatus:
+          isHalted: true
+          timestamp: 7.386281948385884
+        tradeBreaks:
+        - size: 5.025004791520295
+          price: 4.965218492984954
+          isISO: true
+          isSinglePriceCross: true
+          isOutsideRegularHours: true
+          isTradeThroughExempt: true
+          isOddLot: true
+          tradeId: 9.965781217890562
+          timestamp: 9.369310271410669
+        - size: 5.025004791520295
+          price: 4.965218492984954
+          isISO: true
+          isSinglePriceCross: true
+          isOutsideRegularHours: true
+          isTradeThroughExempt: true
+          isOddLot: true
+          tradeId: 9.965781217890562
+          timestamp: 9.369310271410669
+        lastSalePrice: 1.4658129805029452
+      properties:
+        symbol:
+          type: string
+        marketPercent:
+          nullable: true
+          type: number
+        volume:
+          nullable: true
+          type: number
+        lastSalePrice:
+          nullable: true
+          type: number
+        lastSaleSize:
+          nullable: true
+          type: number
+        lastSaleTime:
+          nullable: true
+          type: number
+        lastUpdated:
+          nullable: true
+          type: number
+        bids:
+          items:
+            $ref: '#/components/schemas/order'
+          type: array
+        asks:
+          items:
+            $ref: '#/components/schemas/order'
+          type: array
+        systemEvent:
+          items:
+            $ref: '#/components/schemas/systemEvent'
+          type: array
+        tradingStatus:
+          $ref: '#/components/schemas/inline_response_200_1_tradingStatus'
+        opHaltStatus:
+          $ref: '#/components/schemas/inline_response_200_1_opHaltStatus'
+        ssrStatus:
+          $ref: '#/components/schemas/inline_response_200_1_ssrStatus'
+        securityEvent:
+          $ref: '#/components/schemas/inline_response_200_1_securityEvent'
+        trades:
+          items:
+            $ref: '#/components/schemas/trade'
+          type: array
+        tradeBreaks:
+          items:
+            $ref: '#/components/schemas/inline_response_200_1_tradeBreaks'
+          type: array
+        auction:
+          $ref: '#/components/schemas/inline_response_200_1_auction'
+    inline_response_200_2:
+      example:
+        date: date
+        feed: feed
+        protocol: protocol
+        size: size
+        link: link
+        version: version
+      properties:
+        link:
+          type: string
+        date:
+          type: string
+        feed:
+          type: string
+        version:
+          type: string
+        protocol:
+          type: string
+        size:
+          type: string
+    inline_response_200_3:
+      example:
+        symbol: symbol
+        size: 6.027456183070403
+        price: 0.8008281904610115
+        time: 1.4658129805029452
+      properties:
+        symbol:
+          description: Refers to the stock ticker
+          type: string
+        price:
+          description: Refers to last sale price of the stock on IEX. Refer to the
+            attribution section.
+          nullable: true
+          type: number
+        size:
+          description: Refers to the last sale size of the stock on IEX.
+          nullable: true
+          type: number
+        time:
+          description: Refers to last sale time in epoch time of the stock on IEX.
+          nullable: true
+          type: number
+    inline_response_200_4:
+      properties:
+        priceType:
+          enum:
+          - Open
+          - Close
+          type: string
+        price:
+          nullable: true
+          type: number
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_5:
+      properties:
+        isHalted:
+          type: boolean
+        timeStamp:
+          nullable: true
+          type: number
+    inline_response_200_6:
+      properties:
+        securityEvent:
+          enum:
+          - MarketOpen
+          - MarketClose
+          type: string
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_7:
+      example:
+        systemEvent:
+          systemEvent: O
+          timestamp: 2.027123023002322
+        timestamp: 0.8008281904610115
+      properties:
+        systemEvent:
+          $ref: '#/components/schemas/systemEvent'
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_8:
+      example:
+        symbol: symbol
+        askPrice: 5.637376656633329
+        marketPercent: 0.8008281904610115
+        bidSize: 6.027456183070403
+        lastSaleSize: 9.301444243932576
+        bidPrice: 1.4658129805029452
+        volume: 2.3021358869347655
+        lastSaleTime: 3.616076749251911
+        lastUpdated: 2.027123023002322
+        securityType: securityType
+        askSize: 5.962133916683182
+        lastSalePrice: 7.061401241503109
+      properties:
+        symbol:
+          description: Refers to the stock ticker
+          type: string
+        marketPercent:
+          nullable: true
+          type: number
+        bidSize:
+          description: Refers to IEX's percentage of the market in the stock
+          nullable: true
+          type: number
+        bidPrice:
+          description: Refers to the best bid price on IEX
+          nullable: true
+          type: number
+        askSize:
+          description: Refers to amount of shares on the ask on IEX
+          nullable: true
+          type: number
+        askPrice:
+          description: Refers to the best ask price on IEX
+          nullable: true
+          type: number
+        volume:
+          description: Refers to shares traded in the stock on IEX
+          nullable: true
+          type: number
+        lastSalePrice:
+          description: Refers to last sale price of the stock on IEX. Refer to the
+            attribution section.
+          nullable: true
+          type: number
+        lastSaleSize:
+          description: Refers to last sale size of the stock on IEX
+          type: number
+        lastSaleTime:
+          description: Refers to last sale time in epoch time of the stock on IEX.
+          type: number
+        lastUpdated:
+          description: |
+            Refers to the last update time of the data in milliseconds since midnight  Jan 1, 1970 or `-1`. If the value is `-1`, IEX has not quoted the symbol in the trading day.
+          type: number
+        sector:
+          $ref: '#/components/schemas/sector'
+        securityType:
+          description: Refers to the common issue type.
+          type: string
+    inline_response_200_9:
+      properties:
+        status:
+          description: |
+            * `H` Trading halted across all US equity markets * `O` Trading halt released into an ORder Acceptance Period (IEX-listed securities only) * `P` Trading paused and Order Acceptance Period on IEX (IEX-listed securities only) * `T` Trading on IEX
+          enum:
+          - H
+          - O
+          - P
+          - T
+          type: string
+        reason:
+          description: |
+            Trading Halt Reasons
+              * `T1` Halt News Pending
+              * `IPO1` IPO/New Issue Not Yet Trading
+              * `IPOD` IPO/New Issue Deferred
+              * `MCB3` Market-Wide ircuit Breaker Level 3 - Breaked
+              `NA` Reason Not Available
+            Order Acceptance Period Reasons
+              * `T2` Halt News Dissemination
+              * `IPO2` IPO/New Issue Order Acceptance Period
+              * `IPO3` IPO Pre-Launch Period
+              * `MCB1` Market-Wide Circuit Breaker Level 1 - Breached
+              * `MCB2` Market-Wide Circuit Breaker Level 2 - Breached
+          enum:
+          - T1
+          - IPO1
+          - IPOD
+          - MCB3
+          - NA
+          - T2
+          - IPO2
+          - IPO3
+          - MCB1
+          - MCB2
+          type: string
+        timestamp:
+          nullable: true
+          type: number
+    inline_response_200_10:
+      example:
+        date: date
+        volume: 0.8008281904610115
+        marketShare: 1.4658129805029452
+        routedVolume: 6.027456183070403
+        litVolume: 5.637376656633329
+        isHalfday: 5.962133916683182
+      properties:
+        date:
+          type: string
+        volume:
+          nullable: true
+          type: number
+        routedVolume:
+          nullable: true
+          type: number
+        marketShare:
+          nullable: true
+          type: number
+        isHalfday:
+          nullable: true
+          type: number
+        litVolume:
+          nullable: true
+          type: number
+    inline_response_200_11:
+      description: |
+        * volume refers to single counted shares matched from executions on IEX * symbolsTraded refers to number of symbols traded on IEX * routedVolume refers to executions received from orders routed to away trading centers * notional refers to sum of matched volume times execution price of those trades * marketShare refers to IEX's percentage of total US Equity market volume * lastUpdated refers to the last update time of the data in muilliseconds since midnight Jan 1, 1970
+      example:
+        volume:
+          lastUpdated: 6.027456183070403
+          value: 0.8008281904610115
+        notional:
+          lastUpdated: 6.027456183070403
+          value: 0.8008281904610115
+        symbolsTraded:
+          lastUpdated: 6.027456183070403
+          value: 0.8008281904610115
+        routedVolume:
+          lastUpdated: 6.027456183070403
+          value: 0.8008281904610115
+      properties:
+        volume:
+          $ref: '#/components/schemas/timestampedValue'
+        symbolsTraded:
+          $ref: '#/components/schemas/timestampedValue'
+        routedVolume:
+          $ref: '#/components/schemas/timestampedValue'
+        notional:
+          $ref: '#/components/schemas/timestampedValue'
+    inline_response_200_12:
+      example:
+        date: 2000-01-23
+        volume: 0.8008281904610115
+        marketShare: 1.4658129805029452
+        routedVolume: 6.027456183070403
+        litVolume: 5.962133916683182
+        isHalfday: true
+      properties:
+        date:
+          description: Refers to the trading day
+          format: date
+          type: string
+        volume:
+          description: refers to executions received from order routed to away trading
+            centers
+          nullable: true
+          type: number
+        routedVolume:
+          description: refers to single counted shares matched from executions on
+            IEX
+          nullable: true
+          type: number
+        marketShare:
+          description: refers to IEX's percentage of total US Equity market volume
+          nullable: true
+          type: number
+        isHalfday:
+          description: will be true if the trading day is a half day
+          type: boolean
+        litVolume:
+          description: refers to the number of lit shares traded on IEX (single-counted)
+          nullable: true
+          type: number
+    inline_response_200_13:
+      description: |
+        * volume refers to single counted shares matched from executions on IEX * symbolsTraded refers to number of symbols traded on IEX * routedVolume refers to executions received from an order routed to away trading centers * notional refers to sum of matched volume times execution price of those trades
+      example:
+        volume:
+          recordDate: recordDate
+          avg30Value: 1.4658129805029452
+          previousDayValue: 6.027456183070403
+          recordValue: 0.8008281904610115
+        notional:
+          recordDate: recordDate
+          avg30Value: 1.4658129805029452
+          previousDayValue: 6.027456183070403
+          recordValue: 0.8008281904610115
+        symbolsTraded:
+          recordDate: recordDate
+          avg30Value: 1.4658129805029452
+          previousDayValue: 6.027456183070403
+          recordValue: 0.8008281904610115
+        routedVolume:
+          recordDate: recordDate
+          avg30Value: 1.4658129805029452
+          previousDayValue: 6.027456183070403
+          recordValue: 0.8008281904610115
+      properties:
+        volume:
+          $ref: '#/components/schemas/recordedValue'
+        symbolsTraded:
+          $ref: '#/components/schemas/recordedValue'
+        routedVolume:
+          $ref: '#/components/schemas/recordedValue'
+        notional:
+          $ref: '#/components/schemas/recordedValue'
+    inline_response_200_14:
+      example:
+        tapeId: tapeId
+        venueName: venueName
+        volume: 0.8008281904610115
+        tapeB: 1.4658129805029452
+        tapeC: 5.962133916683182
+        lastUpdated: 2.3021358869347655
+        marketPercent: 5.637376656633329
+        mic: mic
+        tapeA: 6.027456183070403
+      properties:
+        mic:
+          description: refers to the Market Identifier Code (MIC)
+          type: string
+        tapeId:
+          description: refers to the tape id of the venue
+          type: string
+        venueName:
+          description: refers to name of the venue defined by IEX
+          type: string
+        volume:
+          description: refers to the amount of traded shares reported by the venue
+          type: number
+        tapeA:
+          description: refers to the amount of Tape A traded shares reported by the
+            venue
+          type: number
+        tapeB:
+          description: refers to the amount of Tape B traded shares reported by the
+            venue
+          type: number
+        tapeC:
+          description: refers to the amount of Tape C traded shares reported by the
+            venue
+          type: number
+        marketPercent:
+          description: refers to the venue's percentage of shares traded in the market
+          type: number
+        lastUpdated:
+          description: |
+            refers to the last update time of the data in milliseconds since midnight Jan 1, 1970
+          type: number
+    inline_response_200_15:
+      example:
+        date: date
+        iexId: 0.8008281904610115
+        symbol: symbol
+        isEnabled: isEnabled
+        name: name
+        type: ad
+      properties:
+        symbol:
+          description: Refers to the symbol represented in Nasdaq Integrated symbology
+            (INET)
+          type: string
+        name:
+          description: REturns the name of the company or security
+          type: string
+        date:
+          description: refers to the date the symbol reference data was generated
+          type: string
+        isEnabled:
+          description: will be true if the symbol is enabled for trading on IEX
+          type: string
+        type:
+          description: |
+            refers to the common issue type:
+              * ad = ADR
+              * re = REIT
+              * ce = Closed end fund
+              * si = Secondary issue
+              * lp = Limited partnerships
+              * cs = Common stock
+              * et = ETF
+          enum:
+          - ad
+          - re
+          - ce
+          - si
+          - lp
+          - cs
+          - et
+          type: string
+        iexId:
+          description: unique ID applied by IEX to track securities through symbol
+            changes
+          nullable: true
+          type: number
+    inline_response_200_16:
+      example:
+        quote:
+          symbol: symbol
+          avgTotalVolume: 8.762042012749001
+          companyName: companyName
+          iexRealtimePrice: 2.027123023002322
+          delayedPrice: 1.2315135367772556
+          iexMarketPercent: 9.369310271410669
+          calculationPrice: tops
+          extendedChangePercent: 7.457744773683766
+          latestSource: IEX real time price
+          primaryExchange: primaryExchange
+          latestUpdate: 9.301444243932576
+          iexBidPrice: 9.018348186070783
+          previousClose: 4.965218492984954
+          high: 5.637376656633329
+          peRatio: 2.8841621266687802
+          low: 2.3021358869347655
+          delayedPriceTime: 1.0246457001441578
+          extendedPrice: 1.4894159098541704
+          extendedPriceTime: 1.1730742509559433
+          week52Low: 6.878052220127876
+          closeTime: 5.962133916683182
+          changePercent: 9.965781217890562
+          week52High: 6.778324963048013
+          openTime: 6.027456183070403
+          sector: sector
+          close: 1.4658129805029452
+          latestPrice: 7.061401241503109
+          marketCap: 1.284659006116532
+          iexRealtimeSize: 4.145608029883936
+          iexLastUpdated: 7.386281948385884
+          change: 5.025004791520295
+          latestVolume: 3.616076749251911
+          iexAskPrice: 3.5571952270680973
+          ytdChange: 5.944895607614016
+          iexVolume: 6.683562403749608
+          iexAskSize: 6.965117697638846
+          extendedChange: 6.84685269835264
+          latestTime: latestTime
+          open: 0.8008281904610115
+          iexBidSize: 6.438423552598547
+        asks:
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        bids:
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        - size: 9.301444243932576
+          price: 7.061401241503109
+          timestamp: 3.616076749251911
+        trades:
+        - size: 6.84685269835264
+          price: 1.4894159098541704
+          isISO: true
+          isSinglePriceCross: true
+          isOutsideRegularHours: true
+          isTradeThroughExempt: true
+          isOddLot: true
+          tradeId: 7.457744773683766
+          timestamp: 1.1730742509559433
+        - size: 6.84685269835264
+          price: 1.4894159098541704
+          isISO: true
+          isSinglePriceCross: true
+          isOutsideRegularHours: true
+          isTradeThroughExempt: true
+          isOddLot: true
+          tradeId: 7.457744773683766
+          timestamp: 1.1730742509559433
+        systemEvent:
+          systemEvent: O
+          timestamp: 2.027123023002322
+      properties:
+        quote:
+          $ref: '#/components/schemas/quote'
+        bids:
+          items:
+            $ref: '#/components/schemas/order'
+          type: array
+        asks:
+          items:
+            $ref: '#/components/schemas/order'
+          type: array
+        trades:
+          items:
+            $ref: '#/components/schemas/trade'
+          type: array
+        systemEvent:
+          $ref: '#/components/schemas/systemEvent'
+    inline_response_200_17:
+      example:
+        data:
+        - ""
+        - ""
+        range: today
+      properties:
+        range:
+          enum:
+          - today
+          - 1m
+          type: string
+        data:
+          items:
+            allOf:
+            - $ref: '#/components/schemas/chartAll'
+            - $ref: '#/components/schemas/chart1d'
+            - $ref: '#/components/schemas/chartNot1d'
+          type: array
+    inline_response_200_18:
+      example:
+        issueType: ad
+        symbol: symbol
+        website: website
+        companyName: companyName
+        description: description
+        exchange: exchange
+        industry: industry
+        CEO: CEO
+        sector: sector
+        tags:
+        - null
+        - null
+      properties:
+        symbol:
+          type: string
+        companyName:
+          type: string
+        exchange:
+          type: string
+        industry:
+          type: string
+        website:
+          type: string
+        description:
+          type: string
+        CEO:
+          type: string
+        issueType:
+          description: |
+            refers to the common issue type of the stock \n * ad - American Depository Receipt (ADRs) * re - Real Estate Investment Trust (REITs) * ce - Closed end fund (Stock and Bond Fund) * si - Secondary issue * lp - Limited Partnerships * cs - Common Stock * et - Exchange Traded Fund (ETF) * (blank) - Not available, i.e. Warrant, Note, or (non-filing) Closed Ended Funds
+          enum:
+          - ad
+          - re
+          - ce
+          - si
+          - lp
+          - cs
+          - et
+          - ""
+          type: string
+        sector:
+          type: string
+        tags:
+          description: an array of strings used to classify the company
+          items:
+            $ref: '#/components/schemas/sector'
+          type: array
+    inline_response_200_19:
+      example:
+        symbol: symbol
+        delayedPriceTime: 1.4658129805029452
+        delayedSize: 6.027456183070403
+        delayedPrice: 0.8008281904610115
+        processedTime: 5.962133916683182
+      properties:
+        symbol:
+          type: string
+        delayedPrice:
+          nullable: true
+          type: number
+        delayedSize:
+          nullable: true
+          type: number
+        delayedPriceTime:
+          nullable: true
+          type: number
+        processedTime:
+          nullable: true
+          type: number
+    inline_response_200_20:
+      example:
+        declaredDate: declaredDate
+        qualified: P
+        amount: 0.8008281904610115
+        flag: FI
+        indicated: 6.027456183070403
+        exDate: exDate
+        recordDate: recordDate
+        paymentDate: paymentDate
+        type: Dividend income
+      properties:
+        exDate:
+          description: Refers to the dividend ex-date
+          type: string
+        paymentDate:
+          description: Refers to the payment date
+          type: string
+        recordDate:
+          description: Refers to the dividend record date
+          type: string
+        declaredDate:
+          description: Refers to the dividend declaration date
+          type: string
+        amount:
+          description: Refers to the payment amount
+          nullable: true
+          type: number
+        flag:
+          description: |
+            Refers to the dividend flag:
+              * LI = Liquidation, instrument liquidates
+              * PR = Proceeds of a sale of rights or shares
+              * RE = Redemption of rights
+              * AC = Accrued dividend
+              * AR = Payment in arrears
+              * AD = Additional payment
+              * EX = Extra payment
+              * SP = Special dividend
+              * YE = Year end
+              * UR = Unknown recordDate
+              * SU = Regular divdend is suspended
+          enum:
+          - FI
+          - LI
+          - PR
+          - RE
+          - AC
+          - AR
+          - AD
+          - EX
+          - SP
+          - YE
+          - UR
+          - SU
+          - ""
+          type: string
+        type:
+          description: |
+            Refers to the dividend payment type
+          enum:
+          - Dividend income
+          - Interest income
+          - Stock dividend
+          - Short term capital gain
+          - Medium term capital gain
+          - Long term capital gain
+          - Unspecified term capital gain
+          type: string
+        qualified:
+          description: |
+            Refers to the dividend income type:
+              * P = Partially qualified income
+              * Q = Qualified income
+              * N = Unqualified income
+              * null = N/A or unknown
+          enum:
+          - P
+          - Q
+          - "N"
+          - null
+          type: string
+        indicated:
+          description: Refers to the indicated rate of the dividend
+          nullable: true
+          type: number
+    inline_response_200_21:
+      example:
+        symbol: symbol
+        earnings:
+        - consensusEPS: 6.027456183070403
+          symbolId: 3.616076749251911
+          yearAgoChangePercent: 7.061401241503109
+          EPSReportDate: 2000-01-23
+          fiscalEndDate: 2000-01-23
+          numberOfEstimates: 5.962133916683182
+          announceTime: announceTime
+          fiscalPeriod: fiscalPeriod
+          estimatedChangePercent: 9.301444243932576
+          estimatedEPS: 1.4658129805029452
+          yearAgo: 2.3021358869347655
+          EPSSurpriseDollar: 5.637376656633329
+          actualEPS: 0.8008281904610115
+        - consensusEPS: 6.027456183070403
+          symbolId: 3.616076749251911
+          yearAgoChangePercent: 7.061401241503109
+          EPSReportDate: 2000-01-23
+          fiscalEndDate: 2000-01-23
+          numberOfEstimates: 5.962133916683182
+          announceTime: announceTime
+          fiscalPeriod: fiscalPeriod
+          estimatedChangePercent: 9.301444243932576
+          estimatedEPS: 1.4658129805029452
+          yearAgo: 2.3021358869347655
+          EPSSurpriseDollar: 5.637376656633329
+          actualEPS: 0.8008281904610115
+        - consensusEPS: 6.027456183070403
+          symbolId: 3.616076749251911
+          yearAgoChangePercent: 7.061401241503109
+          EPSReportDate: 2000-01-23
+          fiscalEndDate: 2000-01-23
+          numberOfEstimates: 5.962133916683182
+          announceTime: announceTime
+          fiscalPeriod: fiscalPeriod
+          estimatedChangePercent: 9.301444243932576
+          estimatedEPS: 1.4658129805029452
+          yearAgo: 2.3021358869347655
+          EPSSurpriseDollar: 5.637376656633329
+          actualEPS: 0.8008281904610115
+        - consensusEPS: 6.027456183070403
+          symbolId: 3.616076749251911
+          yearAgoChangePercent: 7.061401241503109
+          EPSReportDate: 2000-01-23
+          fiscalEndDate: 2000-01-23
+          numberOfEstimates: 5.962133916683182
+          announceTime: announceTime
+          fiscalPeriod: fiscalPeriod
+          estimatedChangePercent: 9.301444243932576
+          estimatedEPS: 1.4658129805029452
+          yearAgo: 2.3021358869347655
+          EPSSurpriseDollar: 5.637376656633329
+          actualEPS: 0.8008281904610115
+      properties:
+        symbol:
+          type: string
+        earnings:
+          items:
+            $ref: '#/components/schemas/earnings'
+          maxItems: 4
+          minItems: 4
+          type: array
+    inline_response_200_22:
+      example:
+        volume: 0.8008281904610115
+        venueName: venueName
+        venue: venue
+        priceImprovement: 5.962133916683182
+        effectiveQuoted: 1.4658129805029452
+        effectiveSpread: 6.027456183070403
+      properties:
+        volume:
+          description: Refers to the eligible shares used for calculating `effectiveSpread`
+            and `priceImprovement`
+          nullable: true
+          type: number
+        venue:
+          description: refers to the Market Identifier Code (MIC)
+          type: string
+        venueName:
+          description: Refers to a readable version of the venue defined by IEX
+          type: string
+        effectiveSpread:
+          description: is designed to measure marketable orders executed in relation
+            to the market center's quoted spread and takes into account hidden and
+            midpoint liquidity available at each market center in dollars
+          nullable: true
+          type: number
+        effectiveQuoted:
+          description: a ratio calculated by dividing a market center's effective
+            spread by the NBBO quoted spread
+          nullable: true
+          type: number
+        priceImprovement:
+          description: the average amount of price improvement in dollars per eligible
+            share executed
+          nullable: true
+          type: number
+    inline_response_200_23:
+      example:
+        symbol: symbol
+        financials:
+        - operatingIncome: 5.637376656633329
+          operatingExpense: 9.301444243932576
+          currentCash: 7.386281948385884
+          currentDebt: 1.2315135367772556
+          cashChange: 7.457744773683766
+          totalAssets: 2.027123023002322
+          totalDebt: 1.4894159098541704
+          totalLiabilities: 4.145608029883936
+          cashFlow: 1.1730742509559433
+          costOfRevenue: 6.027456183070403
+          currentAssets: 3.616076749251911
+          shareholderEquity: 6.84685269835264
+          researchAndDevelopment: 7.061401241503109
+          reportDate: reportDate
+          operatingRevenue: 1.4658129805029452
+          totalCash: 1.0246457001441578
+          operatingGainsLosses: operatingGainsLosses
+          netIncome: 2.3021358869347655
+          totalRevenue: 5.962133916683182
+          grossProfit: 0.8008281904610115
+        - operatingIncome: 5.637376656633329
+          operatingExpense: 9.301444243932576
+          currentCash: 7.386281948385884
+          currentDebt: 1.2315135367772556
+          cashChange: 7.457744773683766
+          totalAssets: 2.027123023002322
+          totalDebt: 1.4894159098541704
+          totalLiabilities: 4.145608029883936
+          cashFlow: 1.1730742509559433
+          costOfRevenue: 6.027456183070403
+          currentAssets: 3.616076749251911
+          shareholderEquity: 6.84685269835264
+          researchAndDevelopment: 7.061401241503109
+          reportDate: reportDate
+          operatingRevenue: 1.4658129805029452
+          totalCash: 1.0246457001441578
+          operatingGainsLosses: operatingGainsLosses
+          netIncome: 2.3021358869347655
+          totalRevenue: 5.962133916683182
+          grossProfit: 0.8008281904610115
+      properties:
+        symbol:
+          type: string
+        financials:
+          items:
+            $ref: '#/components/schemas/financials'
+          type: array
+    inline_response_200_24:
+      example:
+        SymbolinCQSSymbology: SymbolinCQSSymbology
+        SymbolinINETSymbology: SymbolinINETSymbology
+        TradeDate: 0.8008281904610115
+        SymbolinCMSSymbology: SymbolinCMSSymbology
+        SecurityName: SecurityName
+      properties:
+        TradeDate:
+          type: number
+        SymbolinINETSymbology:
+          type: string
+        SymbolinCQSSymbology:
+          type: string
+        SymbolinCMSSymbology:
+          type: string
+        SecurityName:
+          type: string
+    inline_response_200_25:
+      example:
+        viewData:
+        - Float: Float
+          Expected: Expected
+          Company: Company
+          Price: Price
+          Percent: Percent
+          Symbol: Symbol
+          Amount: Amount
+          Shares: Shares
+          Market: Market
+        - Float: Float
+          Expected: Expected
+          Company: Company
+          Price: Price
+          Percent: Percent
+          Symbol: Symbol
+          Amount: Amount
+          Shares: Shares
+          Market: Market
+        rawData:
+        - symbol: symbol
+          cik: cik
+          shareholderShares: 9.301444243932576
+          lockupPeriodExpiration: lockupPeriodExpiration
+          totalAssets: 7.386281948385884
+          city: city
+          businessDescription: businessDescription
+          companyName: companyName
+          totalExpenses: 2.3021358869347655
+          competition: competition
+          expectedDate: expectedDate
+          underWriterCounsel:
+          - underWriterCounsel
+          - underWriterCounsel
+          ceo: ceo
+          priceHigh: 5.962133916683182
+          sharesOverAlloted: 7.061401241503109
+          stockholderEquity: 1.0246457001441578
+          leadUnderwriters:
+          - leadUnderwriters
+          - leadUnderwriters
+          priceLow: 1.4658129805029452
+          revenue: 2.027123023002322
+          sharesOffered: 6.027456183070403
+          state: state
+          sharesOutstanding: 3.616076749251911
+          zip: zip
+          percentOffered: 6.84685269835264
+          amount: 1.4894159098541704
+          address: address
+          companyDescription: companyDescription
+          auditor: auditor
+          totalLiabilities: 1.2315135367772556
+          quietPeriodExpiration: quietPeriodExpiration
+          useOfProceeds: useOfProceeds
+          url: url
+          market: market
+          phone: phone
+          companyCounsel:
+          - companyCounsel
+          - companyCounsel
+          offerAmount: 5.637376656633329
+          netIncome: 4.145608029883936
+          employees: 0.8008281904610115
+          underwriters:
+          - underwriters
+          - underwriters
+          status: status
+        - symbol: symbol
+          cik: cik
+          shareholderShares: 9.301444243932576
+          lockupPeriodExpiration: lockupPeriodExpiration
+          totalAssets: 7.386281948385884
+          city: city
+          businessDescription: businessDescription
+          companyName: companyName
+          totalExpenses: 2.3021358869347655
+          competition: competition
+          expectedDate: expectedDate
+          underWriterCounsel:
+          - underWriterCounsel
+          - underWriterCounsel
+          ceo: ceo
+          priceHigh: 5.962133916683182
+          sharesOverAlloted: 7.061401241503109
+          stockholderEquity: 1.0246457001441578
+          leadUnderwriters:
+          - leadUnderwriters
+          - leadUnderwriters
+          priceLow: 1.4658129805029452
+          revenue: 2.027123023002322
+          sharesOffered: 6.027456183070403
+          state: state
+          sharesOutstanding: 3.616076749251911
+          zip: zip
+          percentOffered: 6.84685269835264
+          amount: 1.4894159098541704
+          address: address
+          companyDescription: companyDescription
+          auditor: auditor
+          totalLiabilities: 1.2315135367772556
+          quietPeriodExpiration: quietPeriodExpiration
+          useOfProceeds: useOfProceeds
+          url: url
+          market: market
+          phone: phone
+          companyCounsel:
+          - companyCounsel
+          - companyCounsel
+          offerAmount: 5.637376656633329
+          netIncome: 4.145608029883936
+          employees: 0.8008281904610115
+          underwriters:
+          - underwriters
+          - underwriters
+          status: status
+      properties:
+        rawData:
+          items:
+            $ref: '#/components/schemas/ipoRawData'
+          type: array
+        viewData:
+          items:
+            $ref: '#/components/schemas/ipoViewData'
+          type: array
+    inline_response_200_26:
+      example:
+        symbol: symbol
+        ytdChangePercent: 6.519180951018382
+        month1ChangePercent: 8.969578798196912
+        month3ChangePercent: 4.652396432933246
+        companyName: companyName
+        shortInterest: 2.3021358869347655
+        EBITDA: 1.4894159098541704
+        float: 4.145608029883936
+        dividendYield: 9.301444243932576
+        revenue: 6.84685269835264
+        returnOnCapital: 6.965117697638846
+        year5ChangePercent: 7.143538047012306
+        cash: 1.1730742509559433
+        week52high: 1.4658129805029452
+        dividendRate: 7.061401241503109
+        day50MovingAvg: 5.944895607614016
+        peRatioLow: 8.762042012749001
+        week52low: 5.962133916683182
+        debt: 4.965218492984954
+        EPSSurpriseDollar: 9.018348186070783
+        marketcap: 0.8008281904610115
+        month6ChangePercent: 0.10263654006109402
+        latestEPS: 3.616076749251911
+        week52change: 5.637376656633329
+        numberOfEstimates: 1.0246457001441578
+        day5ChangePercent: 7.740351818741173
+        latestEPSDate: latestEPSDate
+        institutionPercent: 6.704019297950036
+        profitMargin: 1.284659006116532
+        revenuePerEmployee: 9.369310271410669
+        peRatioHigh: 6.683562403749608
+        sharesOutstanding: 2.027123023002322
+        shortDate: shortDate
+        beta: 6.027456183070403
+        grossProfit: 7.457744773683766
+        consensusEPS: 1.2315135367772556
+        EPSSurprisePercent: 6.438423552598547
+        exDividendDate: exDividendDate
+        returnOnAssets: 3.5571952270680973
+        day200MovingAvg: 6.878052220127876
+        year2ChangePercent: 0.8851374739011653
+        year1ChangePercent: 7.058770351582356
+        shortRatio: 3.0937452626664474
+        returnOnEquity: 7.386281948385884
+        priceToSales: 2.8841621266687802
+        insiderPercent: 3.353193347011243
+        revenuePerShare: 9.965781217890562
+        ttmEPS: 5.025004791520295
+        priceToBook: 6.778324963048013
+      properties:
+        companyName:
+          type: string
+        marketcap:
+          description: Is not calculated in real time
+          nullable: true
+          type: number
+        beta:
+          nullable: true
+          type: number
+        week52high:
+          nullable: true
+          type: number
+        week52low:
+          nullable: true
+          type: number
+        week52change:
+          nullable: true
+          type: number
+        shortInterest:
+          nullable: true
+          type: number
+        shortDate:
+          type: string
+        dividendRate:
+          nullable: true
+          type: number
+        dividendYield:
+          nullable: true
+          type: number
+        exDividendDate:
+          type: string
+        latestEPS:
+          description: Most recent quarter
+          nullable: true
+          type: number
+        latestEPSDate:
+          type: string
+        sharesOutstanding:
+          nullable: true
+          type: number
+        float:
+          nullable: true
+          type: number
+        returnOnEquity:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        consensusEPS:
+          description: Most recent quarter
+          nullable: true
+          type: number
+        numberOfEstimates:
+          description: Most recent quarter
+          nullable: true
+          type: number
+        symbol:
+          type: string
+        EBITDA:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        revenue:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        grossProfit:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        cash:
+          description: Refers to total cash. Trailing twelve months
+          nullable: true
+          type: number
+        debt:
+          description: Refers to total debt. Trailing twelve months
+          nullable: true
+          type: number
+        ttmEPS:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        revenuePerShare:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        revenuePerEmployee:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        peRatioHigh:
+          nullable: true
+          type: number
+        peRatioLow:
+          nullable: true
+          type: number
+        EPSSurpriseDollar:
+          description: Refers to the difference between actual EPS and consensus EPS
+            in dollars
+          nullable: true
+          type: number
+        EPSSurprisePercent:
+          description: Refers to the percent difference between actual EPS and consensus
+            EPS
+          nullable: true
+          type: number
+        returnOnAssets:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        returnOnCapital:
+          description: Trailing twelve months
+          nullable: true
+          type: number
+        profitMargin:
+          nullable: true
+          type: number
+        priceToSales:
+          nullable: true
+          type: number
+        priceToBook:
+          nullable: true
+          type: number
+        day200MovingAvg:
+          nullable: true
+          type: number
+        day50MovingAvg:
+          nullable: true
+          type: number
+        institutionPercent:
+          description: Represents top 15 institutions
+          nullable: true
+          type: number
+        insiderPercent:
+          nullable: true
+          type: number
+        shortRatio:
+          nullable: true
+          type: number
+        year5ChangePercent:
+          nullable: true
+          type: number
+        year2ChangePercent:
+          nullable: true
+          type: number
+        year1ChangePercent:
+          nullable: true
+          type: number
+        ytdChangePercent:
+          nullable: true
+          type: number
+        month6ChangePercent:
+          nullable: true
+          type: number
+        month3ChangePercent:
+          nullable: true
+          type: number
+        month1ChangePercent:
+          nullable: true
+          type: number
+        day5ChangePercent:
+          nullable: true
+          type: number
+    inline_response_200_27:
+      example:
+        venueName: venueName
+        venue: venue
+        size: 6.027456183070403
+        price: 0.8008281904610115
+        time: 1.4658129805029452
+        timeLabel: timeLabel
+      properties:
+        price:
+          description: Refers to the price of the trade
+          nullable: true
+          type: number
+        size:
+          description: Refers to the number of shares of the trade
+          nullable: true
+          type: number
+        time:
+          description: Refers to the time of the trade
+          nullable: true
+          type: number
+        timeLabel:
+          description: formatted time string as HH:MM:SS
+          pattern: (?:[01]|2(?=[0123]))\d:[012345]\d:[012345]\d
+          type: string
+        venue:
+          description: Refers to the venue where the trade occured. `None` refers
+            to a. TRF (off-exchange) trade
+          type: string
+        venueName:
+          description: formatted venue name where the trade occured
+          type: string
+    inline_response_200_28:
+      example:
+        url: url
+      properties:
+        url:
+          type: string
+    inline_response_200_29:
+      example:
+        peers: true
+        symbols:
+        - symbols
+        - symbols
+      properties:
+        peers:
+          type: boolean
+        symbols:
+          items:
+            type: string
+          type: array
+    inline_response_200_30:
+      example:
+        lastUpdated: 6.027456183070403
+        performance: 0.8008281904610115
+        type: type
+      properties:
+        type:
+          description: The type of performance data return. Should always be `sector`.
+          type: string
+        name:
+          $ref: '#/components/schemas/sector'
+        performance:
+          description: Change percent of the sector for the trading day.
+          nullable: true
+          type: number
+        lastUpdated:
+          description: Last updated time of the performance metric represented as
+            millisecond epoch.
+          nullable: true
+          type: number
+    inline_response_200_31:
+      example:
+        declaredDate: declaredDate
+        exDate: exDate
+        recordDate: recordDate
+        paymentDate: paymentDate
+        forFactor: forFactor
+        toFactor: toFactor
+        ratio: 0.8008281904610115
+      properties:
+        exDate:
+          description: Refers to the split ex-Date
+          type: string
+        declaredDate:
+          description: Refers to the split declaration date
+          type: string
+        recordDate:
+          description: Refers to the split record date
+          type: string
+        paymentDate:
+          description: Refers to the split payment date
+          type: string
+        ratio:
+          description: |
+            Refers to the split ration. The split ration is an inverse of the number  of shares that a holder of the stock would have after the split divided  by the number of shares that the holder had before.
+          nullable: true
+          type: number
+        toFactor:
+          description: To factor of the split. Used to calculate the split `ratio`
+            forfactor/tofactor = `ratio` (e.g. 1/2 = 0.5)
+          type: string
+        forFactor:
+          description: For factor of the split. Used to calculate the split `ratio`
+            forfactor/tofactor = `ratio` (e.g. 1/2 = 0.5)
+          type: string
+    inline_response_200_32:
+      example:
+        amc:
+        - null
+        - null
+        bto:
+        - null
+        - null
+      properties:
+        bto:
+          items:
+            $ref: '#/components/schemas/todayEarnings'
+          type: array
+        amc:
+          items:
+            $ref: '#/components/schemas/todayEarnings'
+          type: array
+    inline_response_200_33:
+      example:
+        volume: 0.8008281904610115
+        venueName: venueName
+        date: 2000-01-23
+        venue: venue
+        marketPercent: 6.027456183070403
+        avgMarketPercent: 1.4658129805029452
+      properties:
+        volume:
+          description: |
+            Refers to the current day, 15 minute delayed volume
+          nullable: true
+          type: number
+        venue:
+          description: Refeers to the Market Identifier Code (MIC)
+          type: string
+        venueName:
+          description: Refers to a readable version of the venue defined by IEX
+          type: string
+        date:
+          description: Refers to the date the data was last updated in the format
+            `YYYY-MM-DD`
+          format: date
+          type: string
+        marketPercent:
+          description: Refers tot the 15 minute delayed percent of total stock volume
+            traded by the venue
+          nullable: true
+          type: number
+        avgMarketPercent:
+          description: Refers to the 30 day average percent of total stock volume
+            traded by the venue
+          nullable: true
+          type: number
+    ohlcData_open:
+      example:
+        price: 0.8008281904610115
+        time: 6.027456183070403
+      properties:
+        price:
+          description: Refers to the official open price
+          type: number
+        time:
+          description: Refers to the official listing exchange time for the open
+          type: number
+    ohlcData_close:
+      example:
+        price: 1.4658129805029452
+        time: 5.962133916683182
+      properties:
+        price:
+          description: Refers to the official close price
+          type: number
+        time:
+          description: Refers to the official listing exchange time for the close
+          type: number
+    todayEarnings_allOf:
+      properties:
+        symbol:
+          type: string
+        quote:
+          $ref: '#/components/schemas/quote'
+        headline:
+          description: |
+            Look back of the last few news items and returns the headline of an article that mentions the earnings result.  Useful for displaying the result of an earnings announcement before the data is available in the API.
+          type: string
