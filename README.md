@@ -1,8 +1,8 @@
-## OpenAPI Auto-Generated [http-client](https://www.stackage.org/lts-10.0/package/http-client-0.5.7.1) Bindings to `IEX Haskell SDK`
+## *Semi*-OpenAPI Auto-Generated [http-client](https://www.stackage.org/lts-10.0/package/http-client-0.5.7.1) Bindings to `IEX Haskell SDK`
 
-The library in `lib` provides auto-generated-from-OpenAPI [http-client](https://www.stackage.org/lts-10.0/package/http-client-0.5.7.1) bindings to the IEX Haskell SDK API.
+[![Build Status](https://travis-ci.org/JamesCarl/iex-haskell-sdk.svg?branch=master)](https://travis-ci.org/JamesCarl/iex-haskell-sdk)
 
-OpenApi Version: 3.0.0
+The library in `lib` provides mostly auto-generated-from-OpenAPI [http-client](https://www.stackage.org/lts-10.0/package/http-client-0.5.7.1) bindings to the IEX Haskell SDK API.
 
 ## Installation
 
@@ -28,85 +28,6 @@ from the stack.yaml file and run `stack haddock` again.
 ```
 stack test
 ```
-
-## OpenAPI-Generator
-
-The code generator that produced this library, and which explains how
-to obtain and use the openapi-generator cli tool lives at
-
-https://openapi-generator.tech
-
-The _generator-name_ argument (`--generator-name`) passed to the cli tool used should be
-
-```
-haskell-http-client
-```
-
-### Unsupported OpenAPI Features
-
-* Model Inheritance
-
-This is beta software; other cases may not be supported.
-
-### Codegen "additional properties" parameters
-
-These options allow some customization of the code generation process.
-
-**haskell-http-client additional properties:**
-
-| OPTION                          | DESCRIPTION                                                                                                                   | DEFAULT  | ACTUAL                                |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------- |
-| allowFromJsonNulls              | allow JSON Null during model decoding from JSON                                                                               | true     | true              |
-| allowNonUniqueOperationIds      | allow *different* API modules to contain the same operationId. Each API must be imported qualified                            | false    | false    |
-| allowToJsonNulls                | allow emitting JSON Null during model encoding to JSON                                                                        | false    | false                |
-| baseModule                      | Set the base module namespace                                                                                                 |          | IEXHaskellSDK                      |
-| cabalPackage                    | Set the cabal package name, which consists of one or more alphanumeric words separated by hyphens                             |          | iex-haskell-sdk                    |
-| cabalVersion                    | Set the cabal version number, consisting of a sequence of one or more integers separated by dots                              | 0.1.0.0  | 0.1.0.0                    |
-| customTestInstanceModule        | test module used to provide typeclass instances for types not known by the generator                                          |          |         |
-| configType                      | Set the name of the type used for configuration                                                                               |          | IEXHaskellSDKConfig                      |
-| dateFormat                      | format string used to parse/render a date                                                                                     | %Y-%m-%d | %Y-%m-%d                      |
-| dateTimeFormat                  | format string used to parse/render a datetime. (Defaults to [formatISO8601Millis][1] when not provided)                       |          |                   |
-| dateTimeParseFormat             | overrides the format string used to parse a datetime                                                                          |          |              |
-| generateEnums                   | Generate specific datatypes for OpenAPI enums                                                                                 | true     | true                   |
-| generateFormUrlEncodedInstances | Generate FromForm/ToForm instances for models used by x-www-form-urlencoded operations (model fields must be primitive types) | true     | true |
-| generateLenses                  | Generate Lens optics for Models                                                                                               | true     | true                  |
-| generateModelConstructors       | Generate smart constructors (only supply required fields) for models                                                          | true     | true       |
-| inlineMimeTypes                 | Inline (hardcode) the content-type and accept parameters on operations, when there is only 1 option                           | true     | true                 |
-| modelDeriving                   | Additional classes to include in the deriving() clause of Models                                                              |          |                    |
-| requestType                     | Set the name of the type used to generate requests                                                                            |          | IEXHaskellSDKRequest                     |
-| strictFields                    | Add strictness annotations to all model fields                                                                                | true     | true                  |
-| useKatip                        | Sets the default value for the UseKatip cabal flag. If true, the katip package provides logging instead of monad-logger       | true     | true                      |
-
-[1]: https://www.stackage.org/haddock/lts-9.0/iso8601-time-0.1.4/Data-Time-ISO8601.html#v:formatISO8601Millis
-
-An example setting _dateTimeFormat_ and _strictFields_:
-
-```
-java -jar openapi-generator-cli.jar generate -i petstore.yaml -g haskell-http-client -o output/haskell-http-client --additional-properties=dateTimeFormat="%Y-%m-%dT%H:%M:%S%Q%z" --additional-properties=strictFields=false 
-```
-
-View the full list of Codegen "config option" parameters with the command:
-
-```
-java -jar openapi-generator-cli.jar config-help -g haskell-http-client
-```
-
-## Usage Notes
-
-### Example Petstore Haddock documentation
-
-An example of the generated haddock documentation targeting the server http://petstore.swagger.io/ (Petstore) can be found [here][2]
-
-[2]: https://hackage.haskell.org/package/swagger-petstore
-
-### Example Petstore App
-
-An example application using the auto-generated haskell-http-client bindings for the server http://petstore.swagger.io/ can be found [here][3]
-
-[3]: https://github.com/openapitools/openapi-generator/tree/master/samples/client/petstore/haskell-http-client/example-app
-
-This library is intended to be imported qualified.
-
 ### Modules
 
 | MODULE              | NOTES                                               |
